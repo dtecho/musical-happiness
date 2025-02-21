@@ -1,0 +1,9 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_EN",
+    "goal": "EVENT_NY_Q5",
+    "utterance": "New Year's story",
+    "dateTimeInterval.start": "2022-01-01T00:00:00",
+    "dateTimeInterval.end": "2022-01-01T23:59:59"
+  }
+]

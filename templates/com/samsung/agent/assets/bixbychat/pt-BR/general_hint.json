@@ -1,0 +1,22 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_ptBR",
+    "goal": "ENTERTAIN_BEAT_Q1",
+    "utterance": "Faz um beatbox"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_ptBR",
+    "goal": "ENTERTAIN_SPE_Q3",
+    "utterance": "Qual é a citação do dia?"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_ptBR",
+    "goal": "ENTERTAIN_SPE_Q1",
+    "utterance": "O que se comemora hoje?"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_ptBR",
+    "goal": "ENTERTAIN_JOKE_Q191",
+    "utterance": "Faça algum som"
+  }
+]

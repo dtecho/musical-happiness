@@ -1,0 +1,1 @@
+rar,7z,7z.001,tar,gz,tgz,z,tz,bz2,bzip2,tbz,tbz2,arj,lha,lzh,iso,img,cab

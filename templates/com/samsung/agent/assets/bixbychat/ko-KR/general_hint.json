@@ -1,0 +1,22 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_enteratinment_koKR",
+    "goal": "ENTERTAIN_JOKE_Q2",
+    "utterance": "재밌는 이야기 해줘"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_enteratinment_koKR",
+    "goal": "ENTERTAIN_BEAT_Q1",
+    "utterance": "비트박스 해줘"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_enteratinment_koKR",
+    "goal": "ENTERTAIN_RAP_Q1",
+    "utterance": "랩 해줘"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_enteratinment_koKR",
+    "goal": "ENTERTAIN_SPE_Q126",
+    "utterance": "동물 소리 내봐"
+  }
+]

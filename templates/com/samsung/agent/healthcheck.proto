@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.healthCheck";
+
+package viv;
+
+import "status.proto";
+
+message ServiceParams {
+    // eg mobile, tv
+    // required for ASR / TTS
+    string rampcode = 1;
+
+    // eg en-us
+    // required for ASR / TTS
+    string language = 2;
+}
+
+enum ServiceType {
+    // Using all will call services listed
+    // and return individual results for each
+    // except ASR and TTS unless rampcode / language is specified
+    ALL = 0;
+    CES = 1;
+    ASR = 2;
+    AUTH = 3;
+    PDSS = 4;
+    // aka BOS / platform
+    NL = 5;
+    TTS = 6;
+}
+
+message HealthCheckRequest {
+    oneof type {
+        // Only checks that the server is online
+        // by opening a connection to the host + port for that service
+        ConnectionTestRequest ConnectionTestRequest = 1;
+    }
+}
+
+message ConnectionTestRequest {
+    // If not specified, default is to call all services
+    // If ALL is specified in the service array, then all services will be called
+    // regardless of which services have been specified
+    repeated ServiceType services = 1;
+
+    // (optional) Params required to test specific services
+    ServiceParams params = 2;
+}
+
+message HealthCheckResponse {
+    oneof type {
+        ConnectionTestResponse ConnectionTestResponse = 1;
+    }
+}
+
+message ConnectionTestResponse {
+    // Used to reference against logs if necessary
+    string connectionTestId = 1;
+
+    repeated ConnectionResult results = 2;
+
+    message ConnectionResult {
+        oneof type {
+            // This is returned if the request could not be made
+            // due to a missing parameter for example
+            ConnectionResultError ConnectionResultError = 1;
+
+            // This is returned if the request was able to be issued
+            ConnectionResultResponse ConnectionResultResponse = 2;
+        }
+    }
+
+    message ConnectionResultError {
+        ServiceType service = 1;
+
+        GrpcErrorCode code = 2;
+
+        // Error details
+        string details = 3;
+
+        // Error id for referencing in logs
+        string errId = 4;
+
+        // Extended error details
+        // only populated in development environments
+        string errExtended = 5;
+    }
+
+    message ConnectionResultResponse {
+        ServiceType service = 1;
+
+        // true if the service was reachable
+        bool ok = 2;
+
+        // Error id for referencing in logs if ok is false
+        string errId = 3;
+
+        // Extended error details
+        // only populated in development environments
+        string errExtended = 4;
+    }
+}

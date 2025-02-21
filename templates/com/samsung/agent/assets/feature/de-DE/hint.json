@@ -1,0 +1,476 @@
+[
+  {
+    "capsuleId": "bixby.launcher",
+    "eventName": "LAUNCH_APP",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "Starte %s."
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "SET_ALARM",
+    "goal": "viv.clockApp.SetAlarm",
+    "hint": "Alarm einstellen"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "SHOW_ALARM",
+    "goal": "viv.clockApp.ShowAlarm",
+    "hint": "Zeig meine Alarme an"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "ENABLE_ALARMS",
+    "goal": "viv.clockApp.EnableAlarms",
+    "hint": "Schalt den 6-Uhr-Alarm ein"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DISABLE_ALARMS",
+    "goal": "viv.clockApp.DisableAlarms",
+    "hint": "Schalte alle Wecker aus"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "EDIT_ALARM",
+    "goal": "viv.clockApp.EditAlarm",
+    "hint": "Ändere meinen morgendlichen 7-Uhr-Alarm auf 6 Uhr 30"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DELETE_ALARMS",
+    "goal": "viv.clockApp.DeleteAlarms",
+    "hint": "Lösche alle meine Alarme"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "OPEN_STOPWATCH",
+    "goal": "viv.clockApp.OpenClock",
+    "hint": "Öffne den Timer"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "START_TIMER",
+    "goal": "viv.clockApp.StartTimer",
+    "hint": "Leg einen Timer für 5 Minuten fest"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "STOP_TIMER",
+    "goal": "viv.clockApp.StopTimer",
+    "hint": "pausiere den timer"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "RESUME_TIMER",
+    "goal": "viv.clockApp.RestartTimer",
+    "hint": "setze den timer fort"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "CANCEL_TIMER",
+    "goal": "viv.clockApp.CancelTimer",
+    "hint": "brich den timer ab"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DISMISS_TIMER",
+    "goal": "viv.clockApp.DismissTimer",
+    "hint": "verwerfe den timer"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "RESTART_TIMER",
+    "goal": "viv.clockApp.RestartTimer",
+    "hint": "starte den timer erneut"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "OPEN_STOPWATCH",
+    "goal": "viv.clockApp.OpenClock",
+    "hint": "Öffne die Stoppuhr"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DISMISS_ALARM",
+    "goal": "viv.clockApp.DismissAlarm",
+    "hint": "verwerfe den wecker"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "SAVE_TIMER",
+    "goal": "viv.clockApp.SaveTimerMobile",
+    "hint": "Speichere den 5 minuten Timer"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "FIND_EVENTS",
+    "goal": "viv.calendarApp.FindEvents",
+    "hint": "Lies den Terminplan von heute vor"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "ADD_EVENT",
+    "goal": "viv.calendarApp.AddEvent",
+    "hint": "Ein Ereignis hinzufügen"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "EDIT_EVENT",
+    "goal": "viv.calendarApp.EditEvent",
+    "hint": "Ändere die Zeit des Meetings morgen auf 9 Uhr früh"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "DELETE_EVENT",
+    "goal": "viv.calendarApp.DeleteEvent",
+    "hint": "Sag den heutigen Abendessen Termin ab"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "SHARE_EVENT",
+    "goal": "viv.calendarApp.ShareEvent",
+    "hint": "Teile den Terminplan von morgen"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "VIEW_CALENDAR",
+    "goal": "viv.calendarApp.ViewCalendar",
+    "hint": "Zeig mir den Kalender für diesen Monat"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "OPEN_CAMERA",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "Starte Kamera"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "CHANGE_CAMERA_MODE",
+    "goal": "viv.cameraApp.ChangeCameraMode",
+    "hint": "Nimm ein Bild im Pro-Modus auf"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "SET_TIMER_AND_CAPTURE",
+    "goal": "viv.cameraApp.SetTimerAndCapture",
+    "hint": ""
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "SHOW_CAMERA_SETTINGS",
+    "goal": "viv.cameraApp.ShowCameraSettings",
+    "hint": "Öffne die Kamera-Einstellungen"
+  },
+  {
+    "capsuleId": "viv.contactApp",
+    "eventName": "CONTACT_INFO",
+    "goal": "viv.contactApp.ContactInfo",
+    "hint": "Finde ${FREQUENT_CONTACT, Mama} in meinen Kontakten"
+  },
+  {
+    "capsuleId": "viv.contactApp",
+    "eventName": "DELETE_CONTACT",
+    "goal": "viv.contactApp.DeleteContact",
+    "hint": "Kontaktdaten für Elke Müller löschen"
+  },
+  {
+    "capsuleId": "viv.worldClock",
+    "eventName": "DATE_TIME_RESULT",
+    "goal": "viv.worldClock.DateTimeResult",
+    "hint": "Wie spät ist es jetzt?"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "SHOW_CONTENTS",
+    "goal": "viv.galleryApp.ShowPicturesView",
+    "hint": "Zeige Fotos von gestern"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "SHOW_ALBUMS_VIEW",
+    "goal": "viv.galleryApp.ShowAlbumsView",
+    "hint": "Zeig mir meine Albenansicht"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "START_SLIDE_SHOW",
+    "goal": "viv.galleryApp.StartSlideShow",
+    "hint": "Starte eine Diashow"
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "OPEN_INTERNET",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "Starte Internet."
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "DELETE_HISTORY",
+    "goal": "viv.samsungInternetApp.DeleteHistory",
+    "hint": "Bitte lösche meine Internet History"
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "OPEN_BOOKMARK_RESULT",
+    "goal": "viv.samsungInternetApp.OpenBookmarkResult",
+    "hint": ""
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "TURN_ON_SECRET_MODE",
+    "goal": "viv.samsungInternetApp.TurnOnSecretMode",
+    "hint": ""
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "SEND_MESSAGE",
+    "goal": "viv.messageApp.SendMessage",
+    "hint": "schreib eine nachricht an ${FREQUENT_CONTACT, Mama}"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "READ_MESSAGE_INFO",
+    "goal": "viv.messageApp.ReadMessageInfo",
+    "hint": "Lies meine ungelesenen Nachrichten vor"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "DELETE_MESSAGE",
+    "goal": "viv.messageApp.DeleteMessage",
+    "hint": "Lösch die letzte Nachricht"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "MARK_AS_READ",
+    "goal": "viv.messageApp.MarkAsRead",
+    "hint": "Markiere alle meine nachrichten als gelesen"
+  },
+  {
+    "capsuleId": "viv.myFilesApp",
+    "eventName": "FILE_SEARCH",
+    "goal": "viv.myFilesApp.FileSearch",
+    "hint": "Suche nach dem Word-Dokument"
+  },
+  {
+    "capsuleId": "viv.myFilesApp",
+    "eventName": "FILE_OPEN",
+    "goal": "viv.myFilesApp.FileOpen",
+    "hint": "Öffne die Datei, die 'Plan' heißt"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "CALLING_INFO",
+    "goal": "viv.phoneApp.CallingInfo",
+    "hint": "Ruf Johannes an"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "CALL_LOG_INFO",
+    "goal": "viv.phoneApp.CallLogInfo",
+    "hint": "Suche nach Andreas in meiner Anrufliste"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "DELETE_CALL_LOG",
+    "goal": "viv.phoneApp.DeleteCallLog",
+    "hint": "Lösch die Anrufe von Lukas"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "BLOCK_CALL",
+    "goal": "viv.phoneApp.BlockCall",
+    "hint": "Blockiere die Nummer von Thomas Müller"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "CREATE_REMINDER_ACTION",
+    "goal": "viv.reminderApp.CreateReminderAction",
+    "hint": "Erstelle eine Erinnerung"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "CREATE_PARKING_LOCATION_REMINDER",
+    "goal": "viv.reminderApp.CreateParkingLocationReminder",
+    "hint": "Erinnere mich dass ich mein Auto auf B 3 geparkt habe"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "FIND_REMINDERS",
+    "goal": "viv.reminderApp.FindReminders",
+    "hint": "Zeige mir meine Erinnerungen mit dem Schlüsselwort kaufen"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "VIEW_PARKING_REMINDER",
+    "goal": "viv.reminderApp.ViewParkingReminder",
+    "hint": "Zeige mir meine Erinnerung, wo ich geparkt habe"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "EDIT_REMINDERS",
+    "goal": "viv.reminderApp.EditReminders",
+    "hint": "Ändere die Zeit der Erinnerung zu trainieren auf 19 Uhr"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "DELETE_REMINDER",
+    "goal": "viv.reminderApp.DeleteReminder",
+    "hint": "Lösche die Erinnerungen von heute"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "COMPLETE_REMINDER",
+    "goal": "viv.reminderApp.CompleteReminder",
+    "hint": "Markiere die Erinnerungen für heute als abgeschlossen"
+  },
+  {
+    "capsuleId": "viv.calculator",
+    "eventName": "REGEX_CALCULATE",
+    "goal": "viv.calculator.RegexCalculate",
+    "hint": "Rechne 3+1÷2−1x2"
+  },
+  {
+    "capsuleId": "viv.calculator",
+    "eventName": "UNIT_CONVERT",
+    "goal": "viv.calculator.Convert",
+    "hint": "Rechne 1 Tonne in Gramm um"
+  },
+  {
+    "capsuleId": "viv.samsungHealthApp",
+    "eventName": "SHOW_STEP_COUNT",
+    "goal": "viv.samsungHealthApp.ShowStepCount",
+    "hint": "Wie viele Schritte bin ich heute gelaufen?"
+  },
+  {
+    "capsuleId": "viv.samsungNotesApp",
+    "eventName": "CREATE_NEW_NOTE",
+    "goal": "viv.samsungNotesApp.CreateNewNote",
+    "hint": "Schreib eine Notiz, in der steht: Treffe Vorbereitungen für die Einweihungsfeier diesen Mittwoch"
+  },
+  {
+    "capsuleId": "viv.smartViewApp",
+    "eventName": "LAUNCH_SMART_VIEW",
+    "goal": "viv.smartViewApp.LaunchActivity",
+    "hint": "Stell eine TV-Verbindung her"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "CAPTURE_SCREEN",
+    "goal": "viv.systemApp.CaptureScreen",
+    "hint": "Aufnehmen eines Screenshots"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "DELETE_NOTIFICATION",
+    "goal": "viv.systemApp.DeleteNotification",
+    "hint": "lösch alle benachrichtigungen"
+  },
+  {
+    "capsuleId": "bixby.settingsApp",
+    "eventName": "TURN_ON_WIFI",
+    "goal": "bixby.settingsApp.EnableSettings",
+    "hint": "Schalte das WLAN ein"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "TURN_ON_FLASH_LIGHT",
+    "goal": "viv.systemApp.TurnOnFlashlight",
+    "hint": "Taschenlampe einschalten"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "TURN_ON_MUTE",
+    "goal": "viv.systemApp.MuteVolume",
+    "hint": "stumm schalten"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "MAKE_DISPLAY_BRIGHTER",
+    "goal": "viv.systemApp.IncreaseBrightness",
+    "hint": "Mach den Bildschirm heller"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "REPLY_MESSAGE",
+    "goal": "viv.messageApp.SendMessage",
+    "hint": "Antworte auf diese Nachricht"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "SHARE_IMAGE",
+    "goal": "viv.galleryApp.ShareContents",
+    "hint": "Dieses Bild freigeben"
+  },
+  {
+    "capsuleId": "viv.mediaControl",
+    "eventName": "PLAY_NEXT_MUSIC",
+    "goal": "viv.mediaControl.SkipSong",
+    "hint": "Als nächstes wiedergeben"
+  },
+  {
+    "capsuleId": "viv.mediaControl",
+    "eventName": "STOP_MUSIC",
+    "goal": "viv.mediaControl.StopMusic",
+    "hint": "beende das lied"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "INCREASE_VOLUME",
+    "goal": "viv.systemApp.TurnUpVolume",
+    "hint": "Lautstärke erhöhen"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "SCROLL_DOWN",
+    "goal": "viv.systemApp.ScrollDown",
+    "hint": "scrolle runter"
+  },
+  {
+    "capsuleId": "bixby.settingsApp",
+    "eventName": "INCREASE_FONT_SIZE",
+    "goal": "bixby.settingsApp.IncreaseFontsize",
+    "hint": "Erhöhe die Schriftgröße"
+  },
+  {
+    "capsuleId": "viv.twc",
+    "eventName": "CHECK_WEATHER",
+    "goal": "viv.twc.Weather",
+    "hint": "Wie ist das Wetter heute?"
+  },
+  {
+    "capsuleId": "viv.deviceMaintenanceApp",
+    "eventName": "TURN_ON_POWER_SAVING_MODE",
+    "goal": "viv.deviceMaintenanceApp.TurnOnPowerSavingMode",
+    "hint": "Energiesparmodus einschalten"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "TAKE_A_SELFIE",
+    "goal": "viv.cameraApp.ChangeCameraModeAndCapture",
+    "hint": "Ein Selfie aufnehmen"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "VIDEO_CALLING_INFO",
+    "goal": "viv.phoneApp.CallingInfo",
+    "hint": "Starte einen Videoanruf an ${FREQUENT_CONTACT, Mama}"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "FIND_TOMORROW_EVENTS",
+    "goal": "viv.calendarApp.FindEvents",
+    "hint": "Zeige den Terminplan von morgen an"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "OPEN_GALLERY",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "Starte Galerie"
+  },
+  {
+    "capsuleId": "viv.smartThingsFind",
+    "eventName": "RING_MY_PHONE",
+    "goal": "viv.smartThingsFind.FindDeviceResult",
+    "hint": ""
+  }
+]

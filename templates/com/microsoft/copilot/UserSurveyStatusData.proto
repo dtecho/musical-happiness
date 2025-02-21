@@ -1,0 +1,6 @@
+syntax = "proto3";
+package com.microsoft.copilotn.usersurvey;
+
+message UserSurveyStatusData {
+  int32 userSurveyCompletedVersion = 1;
+}

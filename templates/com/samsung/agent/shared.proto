@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.shared";
+
+// shared message types
+message GeoPosition {
+    double latitude = 1;
+    double longitude = 2;
+
+    // Accuracy of latitude/longitude in meters
+    double accuracy = 3;
+
+    // false: use latitude / longitude values
+    // true: do not use latitude / longitude values
+    // The GPS is disabled, or location
+    // services could not determine a location
+    // It will treat latitude / longitude values as null instead
+    bool locationDisabled = 4;
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_itIT",
+    "goal": "ENTERTAIN_COSAACCADDEOGGI_Q1",
+    "utterance": "Correva l'anno..."
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_itIT",
+    "goal": "ENTERTAIN_JOKE_Q10",
+    "utterance": "Dimmi una barzelletta"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_itIT",
+    "goal": "ENTERTAIN_USERISSAD_Q26",
+    "utterance": "Mettimi di buon umore"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_itIT",
+    "goal": "ENTERTAIN_BEATBOX_Q1",
+    "utterance": "Fammi sentire un beatbox"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_itIT",
+    "goal": "ENTERTAIN_BUONCOMPLEANNO_Q1",
+    "utterance": "Quali sono i compleanni di oggi?"
+  }
+]

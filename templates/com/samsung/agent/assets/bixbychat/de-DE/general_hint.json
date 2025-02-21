@@ -1,0 +1,27 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_deDE_Entertainment",
+    "goal": "ENTERTAIN_RAP_Q1",
+    "utterance": "Rappe für mich"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_deDE_Entertainment",
+    "goal": "ENTERTAIN_BEAT_Q1",
+    "utterance": "Beatboxe für mich"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_deDE_Entertainment",
+    "goal": "ENTERTAIN_JOKE_Q10",
+    "utterance": "Erzähl mir einen Witz"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_deDE_Entertainment",
+    "goal": "FORTUNECOOKIES_RS1",
+    "utterance": "Öffne einen Glückskeks"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_deDE_Entertainment",
+    "goal": "ABOUTME_CAT3_Q4",
+    "utterance": "Mir ist langweilig"
+  }
+]

@@ -1,0 +1,600 @@
+[
+  {
+    "appId": "4C7",
+    "appName": "LAUNCHER",
+    "packageName": "com.sec.android.app.launcher",
+    "events": [
+      {
+        "name": "LAUNCH_APP",
+        "pageIds": [],
+        "eventIds": [
+          "1001",
+          "1002"
+        ]
+      }
+    ]
+  },
+  {
+    "appId": "781",
+    "appName": "CLOCK",
+    "packageName": "com.sec.android.app.clockpackage",
+    "events": [
+      {
+        "name": "SET_ALARM",
+        "pageIds": [],
+        "eventIds": [
+          "1008"
+        ]
+      },
+      {
+        "name": "SHOW_ALARM",
+        "pageIds": [
+          "101"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "ENABLE_ALARMS",
+        "pageIds": [],
+        "eventIds": [
+          "1005"
+        ]
+      },
+      {
+        "name": "DISABLE_ALARMS",
+        "pageIds": [],
+        "eventIds": [
+          "1005"
+        ]
+      },
+      {
+        "name": "EDIT_ALARM",
+        "pageIds": [
+          "103"
+        ],
+        "eventIds": [
+          "1222"
+        ]
+      },
+      {
+        "name": "DELETE_ALARMS",
+        "pageIds": [
+          "102"
+        ],
+        "eventIds": [
+          "1011"
+        ]
+      },
+      {
+        "name": "OPEN_CLOCK",
+        "pageIds": [
+          "130"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "START_TIMER",
+        "pageIds": [],
+        "eventIds": [
+          "1130"
+        ]
+      },
+      {
+        "name": "STOP_TIMER",
+        "pageIds": [],
+        "eventIds": [
+          "1303"
+        ]
+      },
+      {
+        "name": "RESUME_TIMER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "CANCEL_TIMER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "DISMISS_TIMER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "RESTART_TIMER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "OPEN_STOPWATCH",
+        "pageIds": [
+          "120"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "DISMISS_ALARM",
+        "pageIds": [
+          "304",
+          "305"
+        ],
+        "eventIds": [
+          "3044",
+          "3045",
+          "3046",
+          "3042",
+          "3048",
+          "3055",
+          "3056",
+          "3057",
+          "3052",
+          "3054"
+        ]
+      },
+      {
+        "name": "SAVE_TIMER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "DATE_TIME_RESULT",
+        "pageIds": [
+          "110",
+          "113"
+        ],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "769",
+    "appName": "CALENDAR",
+    "packageName": "com.samsung.android.calendar",
+    "events": [
+      {
+        "name": "FIND_EVENTS",
+        "pageIds": [
+          "003",
+          "004",
+          "005"
+        ],
+        "eventIds": [
+          "2700",
+          "1032"
+        ]
+      },
+      {
+        "name": "ADD_EVENT",
+        "pageIds": [
+          "050"
+        ],
+        "eventIds": [
+          "1502"
+        ]
+      },
+      {
+        "name": "EDIT_EVENT",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "DELETE_EVENT",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "SHARE_EVENT",
+        "pageIds": [],
+        "eventIds": [
+          "2001"
+        ]
+      },
+      {
+        "name": "VIEW_CALENDAR",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "407",
+    "appName": "CAMERA",
+    "packageName": "com.sec.android.app.camera",
+    "events": [
+      {
+        "name": "OPEN_CAMERA",
+        "pageIds": [
+          "001"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "CHANGE_CAMERA_MODE",
+        "pageIds": [],
+        "eventIds": [
+          "0012"
+        ]
+      },
+      {
+        "name": "CHANGE_CAMERA_MODE_AND_CAPTURE",
+        "pageIds": [],
+        "eventIds": [
+          "0011"
+        ]
+      },
+      {
+        "name": "SHOW_CAMERA_SETTINGS",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "751",
+    "appName": "CONTACTS",
+    "packageName": "com.samsung.android.app.contacts",
+    "events": [
+      {
+        "name": "CONTACT_INFO",
+        "pageIds": [
+          "452",
+          "404"
+        ],
+        "eventIds": [
+          "8347",
+          "4103"
+        ]
+      },
+      {
+        "name": "DELETE_CONTACT",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "755",
+    "appName": "GALLERY",
+    "packageName": "com.sec.android.gallery3d",
+    "events": [
+      {
+        "name": "SHOW_CONTENTS",
+        "pageIds": [
+          "301",
+          "801",
+          "302",
+          "802"
+        ],
+        "eventIds": [
+          "1809",
+          "1007",
+          "4104"
+        ]
+      },
+      {
+        "name": "SHOW_ALBUMS_VIEW",
+        "pageIds": [
+          "104",
+          "101"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "START_SLIDE_SHOW",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "705",
+    "appName": "INTERNET",
+    "packageName": "com.sec.android.app.sbrowser",
+    "events": [
+      {
+        "name": "OPEN_INTERNET",
+        "pageIds": [
+          "201"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "DELETE_HISTORY",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "OPEN_BOOKMARK_RESULT",
+        "pageIds": [
+          "301"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "TURN_ON_SECRET_MODE",
+        "pageIds": [
+          "202"
+        ],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "757",
+    "appName": "MESSAGE",
+    "packageName": "com.samsung.android.messaging",
+    "events": [
+      {
+        "name": "SEND_MESSAGE",
+        "pageIds": [],
+        "eventIds": [
+          "3109",
+          "1107"
+        ]
+      },
+      {
+        "name": "READ_MESSAGE_INFO",
+        "pageIds": [],
+        "eventIds": [
+          "1001",
+          "1002"
+        ]
+      },
+      {
+        "name": "DELETE_MESSAGE",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "MARK_AS_READ",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "0010",
+    "appName": "MY_FILES",
+    "packageName": "com.sec.android.app.myfiles",
+    "events": [
+      {
+        "name": "FILE_SEARCH",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "FILE_OPEN",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "753",
+    "appName": "PHONE",
+    "packageName": "com.samsung.android.dialer",
+    "events": [
+      {
+        "name": "CALLING_INFO",
+        "pageIds": [
+          "120"
+        ],
+        "eventIds": [
+          "1201",
+          "1202",
+          "1205",
+          "3001"
+        ]
+      },
+      {
+        "name": "CALL_LOG_INFO",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "DELETE_CALL_LOG",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "BLOCK_CALL",
+        "pageIds": [
+          "001"
+        ],
+        "eventIds": [
+          "4401"
+        ]
+      }
+    ]
+  },
+  {
+    "appId": "412",
+    "appName": "REMINDER",
+    "packageName": "com.samsung.android.app.reminder",
+    "events": [
+      {
+        "name": "CREATE_REMINDER_ACTION",
+        "pageIds": [
+          "172",
+          "002"
+        ],
+        "eventIds": [
+          "1004"
+        ]
+      },
+      {
+        "name": "CREATE_PARKING_LOCATION_REMINDER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "FIND_REMINDERS",
+        "pageIds": [
+          "100",
+          "120"
+        ],
+        "eventIds": [
+          "1001",
+          "1003"
+        ]
+      },
+      {
+        "name": "VIEW_PARKING_REMINDER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "EDIT_REMINDERS",
+        "pageIds": [
+          "130"
+        ],
+        "eventIds": [
+          "1006"
+        ]
+      },
+      {
+        "name": "DELETE_REMINDER",
+        "pageIds": [],
+        "eventIds": []
+      },
+      {
+        "name": "COMPLETE_REMINDER",
+        "pageIds": [],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "472",
+    "appName": "SYSTEM UI",
+    "packageName": "com.android.systemui",
+    "events": [
+      {
+        "name": "DELETE_NOTIFICATION",
+        "pageIds": [
+          "QPN001"
+        ],
+        "eventIds": [
+          "QPNE0016"
+        ]
+      },
+      {
+        "name": "TURN_ON_WIFI",
+        "pageIds": [],
+        "eventIds": [
+          "QPBE1101"
+        ],
+        "customDimen": {
+          "settings": "Wifi"
+        }
+      },
+      {
+        "name": "TURN_ON_FLASH_LIGHT",
+        "pageIds": [],
+        "eventIds": [
+          "QPBE1101"
+        ],
+        "customDimen": {
+          "settings": "Flashlight"
+        }
+      },
+      {
+        "name": "TURN_ON_MUTE",
+        "pageIds": [],
+        "eventIds": [
+          "QPBE1002"
+        ]
+      },
+      {
+        "name": "MAKE_DISPLAY_BRIGHTER",
+        "pageIds": [],
+        "eventIds": [
+          "QPPE1009"
+        ]
+      }
+    ]
+  },
+  {
+    "appId": "789",
+    "appName": "CALCULATOR",
+    "packageName": "com.sec.android.app.popupcalculator",
+    "events": [
+      {
+        "name": "REGEX_CALCULATE",
+        "pageIds": [
+          "001"
+        ],
+        "eventIds": []
+      },
+      {
+        "name": "UNIT_CONVERT",
+        "pageIds": [],
+        "eventIds": [
+          "1025"
+        ]
+      }
+    ]
+  },
+  {
+    "appId": "707",
+    "appName": "SHEALTH",
+    "packageName": "com.sec.android.app.shealth",
+    "events": [
+      {
+        "name": "SHOW_STEP_COUNT",
+        "pageIds": [
+          "HM024"
+        ],
+        "eventIds": []
+      }
+    ]
+  },
+  {
+    "appId": "034",
+    "appName": "SNOTES",
+    "packageName": "com.samsung.android.app.notes",
+    "events": [
+      {
+        "name": "CREATE_NEW_NOTE",
+        "pageIds": [
+        ],
+        "eventIds": [
+          "0003",
+          "3016"
+        ]
+      }
+    ]
+  },
+  {
+    "appId": "763",
+    "appName": "SMART_VIEW",
+    "packageName": "com.samsung.android.smartmirroring",
+    "events": [
+      {
+        "name": "LAUNCH_SMART_VIEW",
+        "pageIds": [
+          "SmartView_001"
+        ],
+        "eventIds": [
+        ]
+      }
+    ]
+  },
+  {
+    "appId": "414",
+    "appName": "SMART_CAPTURE",
+    "packageName": "com.samsung.android.app.smartcapture",
+    "events": [
+      {
+        "name": "CAPTURE_SCREEN",
+        "pageIds": [
+          "340"
+        ],
+        "eventIds": [
+          "3408"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.microsoft.foundation.experimentation.persistence";
+option java_multiple_files = true;
+option swift_prefix="Proto";
+
+message ExperimentVariants {
+  repeated string variants = 1;
+  int64 last_updated_at = 2;
+}

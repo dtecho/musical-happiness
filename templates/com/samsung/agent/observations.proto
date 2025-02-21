@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.observation";
+
+package viv;
+
+import "viv.proto";
+import "shared.proto";
+
+message ObservationsRequest {
+    // (required) JSON-string of observation data
+
+    repeated string observations = 1;
+
+    Metadata metadata = 2;
+
+    message Metadata {
+        // (required) What CAN to use
+        VivRequest.CanDescriptor can = 1;
+        // (required) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+        string conversationId = 2;
+        // (required) Client-generated requestId. Should be unique.
+        // Use Unix Epoch Timestamp in Milliseconds
+        uint64 requestId = 3;
+        // (required) Id of prior request (in same conversation) to use as context
+        // See VMAIN-19564: You must set priorRequestId (the IDE sets priorRequestIdStr)
+        uint64 priorRequestId = 4;
+        // (required) Olson format timezone string
+        string timezone = 5;
+        // (optional) Geo position
+        GeoPosition geo = 6;
+        // (optional) Client-generated requestId. Should be unique.
+        // This is used only by the IDE (see viv-client-sdk-js project)
+        string requestIdStr = 7;
+        // (optional) Id of prior request (in same conversation) to use as context
+        // This is used only by the IDE (see viv-client-sdk-js project)
+        string priorRequestIdStr = 8;
+    }
+}
+
+message ObservationsResponse {
+    bool ok = 1;
+}

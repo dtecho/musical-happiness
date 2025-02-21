@@ -1,0 +1,27 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_zhCN",
+    "goal": "CHATBOT2_ENTERTAIN_RAP_Q1",
+    "utterance": "来段Rap"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_zhCN",
+    "goal": "CHATBOT2_ENTERTAIN_GAME_Q7",
+    "utterance": "玩个游戏"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_zhCN",
+    "goal": "TREND_CAT3_Q5000",
+    "utterance": "历史上的今天"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_zhCN",
+    "goal": "CHATBOT2_ENTERTAIN_SPE_Q601",
+    "utterance": "网络流行语"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_zhCN",
+    "goal": "CHATBOT2_ENTERTAIN_JOKE_Q1",
+    "utterance": "讲个笑话"
+  }
+]

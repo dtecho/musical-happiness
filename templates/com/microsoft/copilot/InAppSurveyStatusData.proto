@@ -1,0 +1,18 @@
+syntax = "proto3";
+package com.microsoft.copilotn.userfeedback;
+import "google/protobuf/timestamp.proto";
+
+enum InAppSurveyAction {
+  unknown = 0;
+  dismiss = 1;
+  positiveClick = 2;
+  negativeClick = 3;
+}
+
+message InAppSurveyStatusData {
+  InAppSurveyAction lastUserAction = 1;
+  google.protobuf.Timestamp lastUserActionTime = 2;
+  int32 numberOfDismisses = 3;
+  repeated google.protobuf.Timestamp recentActiveDays = 4;
+  map<string, int32> conversationIdCountMap = 5;
+}

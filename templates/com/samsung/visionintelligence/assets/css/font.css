@@ -1,0 +1,41 @@
+@font-face {
+  font-family: SamsungOne;
+  src:url(../font/SamsungOne-300_v1.1_20161104.woff) format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: SamsungOne;
+  src:url(../font/SamsungOne-500_v1.1_20161104.woff) format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: SamsungOne;
+  src: url(../font/SamsungOne-700_v1.1_20161104.woff) format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: SamsungOneKorean300;
+  src: url(../font/SamsungOneKorean-300_v1.2_20190628.woff) format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: SamsungOneKorean500;
+  src: url(../font/SamsungOneKorean-500_v1.2_20190628.woff) format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: SamsungOneKorean700;
+  src: url(../font/SamsungOneKorean-700_v1.2_20190628.woff) format('woff');
+  font-weight: 700;
+  font-style: normal;
+}

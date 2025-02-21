@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.mde";
+
+package viv;
+
+import "viv.proto";
+
+message MdeRequest {
+    // MDE requests need the following parameters to resolve the conversation:
+    //
+    //   * conversationId
+    //   * svcId
+    //   * viewportId
+    //   * canTypeId
+    //   * user (oauthProvider, accountId, internal)
+    //
+    // All we need to compute these values are the can and conversationId fields
+    // defined below, as well as the following standard gRPC headers, which clients
+    // already send as part of the VivRequest execution:
+    //
+    //   * Viv-Device-Type
+    //   * Viv-Device-Id
+    //   * Bixby-Service-Id
+    //   * Any auth header:
+    //      * authorization (user cluster only)
+    //      * viv-access-token (ide cluster only)
+    //      * viv-session-id  (legacy - ide cluster only)
+
+    // (required) What CAN to use
+    VivRequest.CanDescriptor can = 1;
+
+    // (required) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+    string conversationId = 2;
+
+    // (required) Client-generated requestId. Should be unique.
+    // Format is Unix Epoch Timestamp in Milliseconds
+    // Note: requestId is a uint64 because 3rd party services like ASR / TTS
+    // require that the request id be a milisecond timestamp
+    uint64 requestId = 3;
+
+    oneof type {
+        NotifyUserBackNavigationRequest NotifyUserBackNavigation = 4;
+        NotifyMdeUnlinkRequest NotifyMdeUnlink = 5;
+        NotifyTimeoutResetRequest NotifyTimeoutReset = 6;
+        NotifyMicOpenRequest NotifyMicOpen = 7;
+        NotifyMicClosedRequest NotifyMicClosed = 8;
+    }
+
+    // For MDE conversation sync, back navigation needs to be synced across participating devices.
+    message NotifyUserBackNavigationRequest {
+        // This is the requestId of the page that was shown to the user when he/she navigated back.
+        // Because a new request might have taken flight from the other participating device,
+        // the page we navigate back from is not necessarily the priorRequestId in the scope
+        // of the execution (although I suppose it is the priorRequestId from the perspective
+        // of the client navigating back, but I am hesitant to overload this terminology,
+        // as this is not a request in the sense of a page request with an new requestId)
+        uint64 fromRequestId = 1;
+    }
+
+    message NotifyMdeUnlinkRequest {}
+
+    // NotifyTimeoutResetRequest is sent by the client to reset the timeout on the other device
+    // participating in the MDE conversation due to some user interaction that does not result
+    // in a request to BOS. (e.g. user navigates in a list view on TV).
+    message NotifyTimeoutResetRequest {
+        // To prevent that we DOS-attack ourselves for every user click, the client is only allowed
+        // to send this event every 10 seconds. The offsetInMillis is the time that has passed since
+        // the last user interaction in ms.
+        uint64 offsetInMillis = 1;
+    }
+
+    // An MDE participant sends a `NotifyMicOpen` request to notify BOS that it did already open
+    // its microphone (e.g. user pressed the bixby button) If BOS gets such a notification from
+    // MDE participant #1, BOS will send a push message to MDE participant #2 that #1 opened its
+    // microphone. If the executor gets the push message that the listener opened its microphone,
+    // it is supposed to display a “I’m listening” message with the listener's icon. If any
+    // participant gets the push message and has its microphone open, it must close its microphone
+    // (e.g. the listener is listening on a prompt, and I use the button on the executor to open
+    // the microphone and respond on the executor, the listener must close its microphone)
+    message NotifyMicOpenRequest {}
+
+    // An MDE participant sends a `NotifyMicClosed` request to notify the executor to remove the
+    // previously mentioned “I’m listening” affordance, in the case of an ASR rejection,
+    // when the microphone was closed without a BOS request.
+    message NotifyMicClosedRequest {}
+}
+
+message MdeResponse {
+    oneof type {
+        MdeSuccess success = 1;
+        MdeError error = 2;
+    }
+
+    message MdeSuccess {}
+
+    message MdeError {
+        // (optional) Debugging fields in case of an error (when ok is false)
+        string reason = 1;
+        string message = 2;
+    }
+}

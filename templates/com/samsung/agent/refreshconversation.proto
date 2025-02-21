@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.refreshConversation";
+
+package viv;
+
+// Send this request to refresh the conversation timeout on BOS. For instance, when the user scrolls
+// the result page by touch, client can send this event to communicate the user interaction and
+// extend conversation timeout. Client should send it with throttling (e.g. at most once per 10
+// seconds) to avoid sending it too frequently. Also see VAPI-2024.
+message RefreshConversationRequest {
+    // (required) The id of the conversation whose timeout needs to be extended
+    string conversationId = 1;
+}
+
+message RefreshConversationResponse {
+    bool ok = 1;
+}

@@ -1,0 +1,488 @@
+[
+  {
+    "capsuleId": "bixby.launcher",
+    "eventName": "LAUNCH_APP",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "%s 실행해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "SET_ALARM",
+    "goal": "viv.clockApp.SetAlarm",
+    "hint": "알람 맞춰줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "SHOW_ALARM",
+    "goal": "viv.clockApp.ShowAlarm",
+    "hint": "알람 모두 보여줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "ENABLE_ALARMS",
+    "goal": "viv.clockApp.EnableAlarms",
+    "hint": "오전 6시 알람 켜줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DISABLE_ALARMS",
+    "goal": "viv.clockApp.DisableAlarms",
+    "hint": "알람 모두 꺼줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "EDIT_ALARM",
+    "goal": "viv.clockApp.EditAlarm",
+    "hint": "오전 7시 알람을 오전 6시 30분으로 변경해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DELETE_ALARMS",
+    "goal": "viv.clockApp.DeleteAlarms",
+    "hint": "알람 다 삭제해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "OPEN_STOPWATCH",
+    "goal": "viv.clockApp.OpenClock",
+    "hint": "타이머 열어줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "START_TIMER",
+    "goal": "viv.clockApp.StartTimer",
+    "hint": "5분 타이머 설정해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "STOP_TIMER",
+    "goal": "viv.clockApp.StopTimer",
+    "hint": "타이머 멈춰줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "RESUME_TIMER",
+    "goal": "viv.clockApp.ResumeTimerMobile",
+    "hint": "타이머 다시 켜줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "CANCEL_TIMER",
+    "goal": "viv.clockApp.CancelTimer",
+    "hint": "타이머 취소해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DISMISS_TIMER",
+    "goal": "viv.clockApp.DismissTimer",
+    "hint": "타이머 해제해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "RESTART_TIMER",
+    "goal": "viv.clockApp.RestartTimer",
+    "hint": "타이머 다시 시작해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "OPEN_STOPWATCH",
+    "goal": "viv.clockApp.OpenClock",
+    "hint": "스톱워치 열어줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "DISMISS_ALARM",
+    "goal": "viv.clockApp.DismissAlarm",
+    "hint": "알람 해제해줘"
+  },
+  {
+    "capsuleId": "viv.clockApp",
+    "eventName": "SAVE_TIMER",
+    "goal": "viv.clockApp.SaveTimerMobile",
+    "hint": "5분 타이머 저장해줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "FIND_EVENTS",
+    "goal": "viv.calendarApp.FindEvents",
+    "hint": "오늘 일정 읽어줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "ADD_EVENT",
+    "goal": "viv.calendarApp.AddEvent",
+    "hint": "일정 추가해줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "EDIT_EVENT",
+    "goal": "viv.calendarApp.EditEvent",
+    "hint": "내일 미팅 일정 오전 9시로 변경해줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "DELETE_EVENT",
+    "goal": "viv.calendarApp.DeleteEvent",
+    "hint": "오늘 밤 일정 취소해줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "SHARE_EVENT",
+    "goal": "viv.calendarApp.ShareEvent",
+    "hint": "내일 일정 공유해줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "VIEW_CALENDAR",
+    "goal": "viv.calendarApp.ViewCalendar",
+    "hint": "이번 달 달력 보여줘"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "OPEN_CAMERA",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "카메라 실행해줘"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "CHANGE_CAMERA_MODE",
+    "goal": "viv.cameraApp.ChangeCameraMode",
+    "hint": "프로 모드로 사진 찍어줘"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "SET_TIMER_AND_CAPTURE",
+    "goal": "viv.cameraApp.SetTimerAndCapture",
+    "hint": "5초 뒤에 사진 찍어줘"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "SHOW_CAMERA_SETTINGS",
+    "goal": "viv.cameraApp.ShowCameraSettings",
+    "hint": "카메라 설정 보여줘"
+  },
+  {
+    "capsuleId": "viv.contactApp",
+    "eventName": "CONTACT_INFO",
+    "goal": "viv.contactApp.ContactInfo",
+    "hint": "${FREQUENT_CONTACT, 엄마} 연락처 찾아줘"
+  },
+  {
+    "capsuleId": "viv.contactApp",
+    "eventName": "DELETE_CONTACT",
+    "goal": "viv.contactApp.DeleteContact",
+    "hint": "영주라는 이름으로 저장된 연락처 전부 삭제해줘"
+  },
+  {
+    "capsuleId": "viv.worldClock",
+    "eventName": "DATE_TIME_RESULT",
+    "goal": "viv.worldClock.DateTimeResult",
+    "hint": "지금 몇 시야?"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "SHOW_CONTENTS",
+    "goal": "viv.galleryApp.ShowPicturesView",
+    "hint": "어제 찍은 사진 보여줘"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "SHOW_ALBUMS_VIEW",
+    "goal": "viv.galleryApp.ShowAlbumsView",
+    "hint": "내 앨범 보여줘"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "START_SLIDE_SHOW",
+    "goal": "viv.galleryApp.StartSlideShow",
+    "hint": "슬라이드쇼 시작해줘"
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "OPEN_INTERNET",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "인터넷 실행해줘"
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "DELETE_HISTORY",
+    "goal": "viv.samsungInternetApp.DeleteHistory",
+    "hint": "삼성 인터넷에서 모든 방문기록 삭제해줘"
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "OPEN_BOOKMARK_RESULT",
+    "goal": "viv.samsungInternetApp.OpenBookmarkResult",
+    "hint": "삼성 인터넷에서 북마크 보여줘"
+  },
+  {
+    "capsuleId": "viv.samsungInternetApp",
+    "eventName": "TURN_ON_SECRET_MODE",
+    "goal": "viv.samsungInternetApp.TurnOnSecretMode",
+    "hint": "삼성 인터넷에서 비밀모드 켜줘"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "SEND_MESSAGE",
+    "goal": "viv.messageApp.SendMessage",
+    "hint": "${FREQUENT_CONTACT, 주영이}에게 문자 보내줘"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "READ_MESSAGE_INFO",
+    "goal": "viv.messageApp.ReadMessageInfo",
+    "hint": "메시지 전부 읽음 처리 해줘"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "DELETE_MESSAGE",
+    "goal": "viv.messageApp.DeleteMessage",
+    "hint": "가장 최근에 받은 메시지 삭제해줘"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "MARK_AS_READ",
+    "goal": "viv.messageApp.MarkAsRead",
+    "hint": "안 읽은 메세지 전부 읽음 처리 해줘"
+  },
+  {
+    "capsuleId": "viv.myFilesApp",
+    "eventName": "FILE_SEARCH",
+    "goal": "viv.myFilesApp.FileSearch",
+    "hint": "워드 문서 전부 보여줘"
+  },
+  {
+    "capsuleId": "viv.myFilesApp",
+    "eventName": "FILE_OPEN",
+    "goal": "viv.myFilesApp.FileOpen",
+    "hint": "이력서 파일 열어줘"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "CALLING_INFO",
+    "goal": "viv.phoneApp.CallingInfo",
+    "hint": "${FREQUENT_CONTACT, 성현이}한테 전화 걸어줘"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "CALL_LOG_INFO",
+    "goal": "viv.phoneApp.CallLogInfo",
+    "hint": "내 통화목록에서 ${FREQUENT_CONTACT, 창욱} 찾아줘"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "DELETE_CALL_LOG",
+    "goal": "viv.phoneApp.DeleteCallLog",
+    "hint": "성훈이 전화 모두 삭제해줘"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "BLOCK_CALL",
+    "goal": "viv.phoneApp.BlockCall",
+    "hint": "민규 전화랑 문자 전부 차단해줘"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "CREATE_REMINDER_ACTION",
+    "goal": "viv.reminderApp.CreateReminderAction",
+    "hint": "리마인더 생성해줘"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "CREATE_PARKING_LOCATION_REMINDER",
+    "goal": "viv.reminderApp.CreateParkingLocationReminder",
+    "hint": "나 지하 3층에 주차했다고 알려줘"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "FIND_REMINDERS",
+    "goal": "viv.reminderApp.FindReminders",
+    "hint": "쇼핑 리마인더 보여줘"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "VIEW_PARKING_REMINDER",
+    "goal": "viv.reminderApp.ViewParkingReminder",
+    "hint": "나 어디에 주차했어?"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "EDIT_REMINDERS",
+    "goal": "viv.reminderApp.EditReminders",
+    "hint": "운동하기 리마인더 시간을 오후 7시로 변경해줘"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "DELETE_REMINDER",
+    "goal": "viv.reminderApp.DeleteReminder",
+    "hint": "오늘 할 일 목록 삭제해줘"
+  },
+  {
+    "capsuleId": "viv.reminderApp",
+    "eventName": "COMPLETE_REMINDER",
+    "goal": "viv.reminderApp.CompleteReminder",
+    "hint": "오늘 할 일 완료 처리해줘"
+  },
+  {
+    "capsuleId": "viv.calculator",
+    "eventName": "REGEX_CALCULATE",
+    "goal": "viv.calculator.Calculate",
+    "hint": "3 곱하기 2 더하기 1 계산해줘"
+  },
+  {
+    "capsuleId": "viv.calculator",
+    "eventName": "UNIT_CONVERT",
+    "goal": "viv.calculator.Convert",
+    "hint": "100 제곱미터는 몇 평이야"
+  },
+  {
+    "capsuleId": "viv.samsungHealthApp",
+    "eventName": "SHOW_STEP_COUNT",
+    "goal": "viv.samsungHealthApp.ShowStepCount",
+    "hint": "오늘 내가 얼마나 걸었니?"
+  },
+  {
+    "capsuleId": "viv.samsungNotesApp",
+    "eventName": "CREATE_NEW_NOTE",
+    "goal": "viv.samsungNotesApp.CreateNewNote",
+    "hint": "이번 주 수요일에 집들이 준비라고 노트 적어줘"
+  },
+  {
+    "capsuleId": "viv.smartViewApp",
+    "eventName": "LAUNCH_SMART_VIEW",
+    "goal": "viv.smartViewApp.LaunchActivity",
+    "hint": "TV에 연결해줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "CAPTURE_SCREEN",
+    "goal": "viv.systemApp.CaptureScreen",
+    "hint": "화면 캡쳐해줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "DELETE_NOTIFICATION",
+    "goal": "viv.systemApp.DeleteNotification",
+    "hint": "알림 지워줘"
+  },
+  {
+    "capsuleId": "bixby.settingsApp",
+    "eventName": "TURN_ON_WIFI",
+    "goal": "bixby.settingsApp.EnableSettings",
+    "hint": "Wi-Fi 켜줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "TURN_ON_FLASH_LIGHT",
+    "goal": "viv.systemApp.TurnOnFlashlight",
+    "hint": "손전등 켜줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "TURN_ON_MUTE",
+    "goal": "viv.systemApp.MuteVolume",
+    "hint": "음소거 해줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "MAKE_DISPLAY_BRIGHTER",
+    "goal": "viv.systemApp.IncreaseBrightness",
+    "hint": "화면 더 밝게 해줘"
+  },
+  {
+    "capsuleId": "viv.messageApp",
+    "eventName": "REPLY_MESSAGE",
+    "goal": "viv.messageApp.SendMessage",
+    "hint": "답장 해줘"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "SHARE_IMAGE",
+    "goal": "viv.galleryApp.ShareContents",
+    "hint": "이 사진 공유해줘"
+  },
+  {
+    "capsuleId": "viv.mediaControl",
+    "eventName": "PLAY_NEXT_MUSIC",
+    "goal": "viv.mediaControl.SkipSong",
+    "hint": "다음 거 재생해줘"
+  },
+  {
+    "capsuleId": "viv.mediaControl",
+    "eventName": "STOP_MUSIC",
+    "goal": "viv.mediaControl.StopMusic",
+    "hint": "멈춰줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "INCREASE_VOLUME",
+    "goal": "viv.systemApp.TurnUpVolume",
+    "hint": "미디어 볼륨 크게 해줘"
+  },
+  {
+    "capsuleId": "viv.systemApp",
+    "eventName": "SCROLL_DOWN",
+    "goal": "viv.systemApp.ScrollDown",
+    "hint": "아래로 스크롤해줘"
+  },
+  {
+    "capsuleId": "bixby.settingsApp",
+    "eventName": "INCREASE_FONT_SIZE",
+    "goal": "bixby.settingsApp.IncreaseFontsize",
+    "hint": "글자 크기 키워줘"
+  },
+  {
+    "capsuleId": "viv.weatherNews",
+    "eventName": "CHECK_WEATHER",
+    "goal": "viv.weatherNews.Weather",
+    "hint": "오늘 날씨 어때?"
+  },
+  {
+    "capsuleId": "viv.noActionPlaceRecommendation",
+    "eventName": "QR_CHECK_IN",
+    "goal": "viv.noActionPlaceRecommendation.GetQRCodePage",
+    "hint": "QR 체크인"
+  },
+  {
+    "capsuleId": "viv.deviceMaintenanceApp",
+    "eventName": "TURN_ON_POWER_SAVING_MODE",
+    "goal": "viv.deviceMaintenanceApp.TurnOnPowerSavingMode",
+    "hint": "절전 모드 켜줘"
+  },
+  {
+    "capsuleId": "viv.cameraApp",
+    "eventName": "TAKE_A_SELFIE",
+    "goal": "viv.cameraApp.ChangeCameraModeAndCapture",
+    "hint": "셀카 찍어줘"
+  },
+  {
+    "capsuleId": "viv.phoneApp",
+    "eventName": "VIDEO_CALLING_INFO",
+    "goal": "viv.phoneApp.CallingInfo",
+    "hint": "${FREQUENT_CONTACT, 성현이}한테 영상통화 걸어줘"
+  },
+  {
+    "capsuleId": "viv.calendarApp",
+    "eventName": "FIND_TOMORROW_EVENTS",
+    "goal": "viv.calendarApp.FindEvents",
+    "hint": "내일 일정 보여줘"
+  },
+  {
+    "capsuleId": "viv.galleryApp",
+    "eventName": "OPEN_GALLERY",
+    "goal": "bixby.launcher.LaunchApplication",
+    "hint": "갤러리 열어줘"
+  },
+  {
+    "capsuleId": "viv.smartThingsFind",
+    "eventName": "RING_MY_PHONE",
+    "goal": "viv.smartThingsFind.FindDeviceResult",
+    "hint": "내 폰 찾아줘"
+  },
+  {
+    "capsuleId": "viv.weatherNews",
+    "eventName": "FIND_DUST_INFO",
+    "goal": "bixby.weatherInfoResolver_KR.ResolveWeatherInfo",
+    "hint": "오늘 미세먼지 알려줘"
+  }
+]

@@ -1,0 +1,369 @@
+* {
+	-webkit-user-select: none;
+	outline-style: none;
+	-webkit-tap-highlight-color: transparent;
+	word-break: keep-all;
+}
+
+body {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	position: relative;
+}
+
+body,
+p {
+	margin: 0;
+}
+
+#pn-header {
+	height: 24px;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	padding-left: 20px;
+}
+
+#back-button-div #back-button {
+	width: 24px;
+	height: 24px;
+}
+
+#back-button-div {
+	float: left;
+	margin-right: 12px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+#pn-header-title {
+	float: left;
+	height: 28px;
+	font-family: SamsungOneKorean700;
+	font-size: 21px;
+	color: #010101;
+	line-height: 28px;
+}
+
+#service-icon-div {
+	text-align: center;
+	margin-bottom: 8px;
+}
+
+#service-icon {
+	width: 48px;
+	height: 48px;
+}
+
+#pn-title {
+	margin-top: 48px;
+	margin-left: 24px;
+	margin-right: 24px;
+	margin-bottom: 56px;
+}
+
+#service-name {
+	font-family: SamsungOneKorean700;
+	font-size: 34px;
+	color: #010101;
+	text-align: center;
+	font-weight: 700;
+}
+
+#service-name p:first-child {
+	margin-bottom: 6px;
+}
+
+#pn-body {
+	margin-left: 24px;
+	margin-right: 24px;
+	margin-bottom: 60px;
+	font-family: SamsungOneKorean300;
+	font-size: 15px;
+	color: #252525;
+	letter-spacing: 0;
+	line-height: 22px;
+	font-weight: 200;
+}
+
+.item-panel {
+	padding-top: 30px;
+	padding-left: 24px;
+	padding-bottom: 30px;
+	padding-right: 24px;
+	border-top: 0.5px solid #e5e5e5;
+}
+
+.item-title-icon-panel {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+#pn-main .item-panel:last-child {
+	border-bottom: 0.5px solid #e5e5e5;
+}
+
+.item-title-panel {
+	width: calc(100% - 48px);
+	min-height: 21px;
+	float: left;
+	pointer-events: none;
+	margin-right: 24px;
+}
+
+.item-title {
+	font-family: SamsungOneKorean700;
+	font-size: 19px;
+	color: #010101;
+	font-weight: 700;
+}
+
+.item-icon-panel,
+.arrow-button {
+	width: 24px;
+	height: 24px;
+}
+
+.item-icon-panel {
+	display: table-cell;
+	vertical-align: middle;
+	float: right;
+	pointer-events: none;
+}
+
+#pn-footer {
+	margin-top: 36px;
+	margin-left: 24px;
+	margin-right: 24px;
+	margin-bottom: 48px;
+}
+
+#pn-footer .date-text {
+	font-family: SamsungOneKorean300;
+	font-weight: 200;
+	font-size: 13px;
+	color: #7c7c7c;
+	text-align: center;
+}
+
+#previous-version {
+	margin-top: 12px;
+	margin-left: 80px;
+	margin-right: 80px;
+}
+
+#previous-version-button {
+	padding-top: 7px;
+	padding-bottom: 7px;
+	background: #fcfcfc;
+	border: 0.5px solid #777777;
+	border-radius: 16.5px;
+	font-family: SamsungOneKorean500;
+	font-weight: 500;
+	font-size: 15px;
+	color: #252525;
+	text-align: center;
+	line-height: 19px;
+}
+
+.item-more-information {
+	transition: max-height 0.4s ease-out;
+	overflow: auto;
+	max-height: 0px;
+	scrollbar-width: none;
+	-ms-overflow-style: none; /* IE and Edge */
+}
+
+.item-more-information::-webkit-scrollbar {
+	display: none;
+	width: 0;
+	background: transparent;
+}
+
+.item-more-information div:first-child {
+	padding-top: 53px;
+	margin-top: 0px;
+}
+
+.item-more-information div:last-child {
+	margin-bottom: 18px;
+}
+
+.sub-title-1 {
+	font-family: SamsungOneKorean700;
+	font-weight: 700;
+	font-size: 17px;
+	color: #252525;
+	letter-spacing: 0;
+	line-height: 20px;
+	margin-top: 48px;
+}
+
+.sub-content-1 {
+	font-family: SamsungOneKorean300;
+	font-weight: 200;
+	font-size: 15px;
+	color: #252525;
+	letter-spacing: 0;
+	line-height: 22px;
+	margin-top: 12px;
+}
+
+.sub-table-1 {
+	margin-top: 24px;
+	margin-bottom: 24px;
+	overflow: auto;
+}
+
+.sub-table-1 table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.sub-table-1 table,
+.sub-table-1 th,
+.sub-table-1 td {
+	border: 0.5px solid #505050;
+}
+
+.sub-table-1 th,
+.sub-table-1 td {
+	table-layout: auto;
+}
+
+.sub-table-1 table tbody tr th:first-child {
+	width: 25%;
+}
+.sub-table-1 .th-detail-item {
+	font-family: SamsungOneKorean700;
+	font-weight: 700;
+	font-size: 15px;
+	color: #505050;
+	letter-spacing: 0;
+	text-align: center;
+	line-height: 20px;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 12px;
+	padding-bottom: 11px;
+}
+
+.sub-table-1 .td-detail-item {
+	font-family: SamsungOneKorean700;
+	font-weight: 700;
+	font-size: 15px;
+	color: #505050;
+	letter-spacing: 0;
+	text-align: center;
+	line-height: 20px;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+.sub-table-1 .td-detail-content {
+	padding-top: 14px;
+	padding-left: 12px;
+	padding-right: 14px;
+	padding-bottom: 14px;
+}
+
+.sub-table-1 .td-detail-content p {
+	font-family: SamsungOneKorean500;
+	font-weight: 400;
+	font-size: 13px;
+	color: #7c7c7c;
+	letter-spacing: 0;
+	line-height: 20px;
+	margin-bottom: 6px;
+}
+
+.sub-table-1 .td-detail-content p:last-child {
+	margin-bottom: 0px !important;
+}
+
+.sub-table-1 .td-detail-content p.center {
+	text-align: center;
+}
+
+.item-title.selected {
+	color: #0381fe;
+}
+
+/* 2023-08-04 김성민 추가 */
+.item-title-panel img {
+	height: 32px;
+	vertical-align: middle;
+	margin-left: 5px;
+}
+.vt {
+	vertical-align: top;
+}
+.ml5 {
+	margin-left: 5px !important;
+}
+.ml10 {
+	margin-left: 10px !important;
+}
+.ml20 {
+	margin-left: 20px;
+}
+.sub-content-1 ul {
+	width: calc(100% - 25px);
+	margin: 0;
+	padding-left: 25px;
+}
+/* .sub-content-1 ul li {
+	list-style: disc;
+} */
+
+/* phone */
+@media screen and (max-width: 588px) {
+	#pn-main {
+		min-width: 360px;
+		max-width: 500px;
+		margin: auto;
+	}
+
+	table {
+		width: 500px;
+	}
+}
+
+/* winner, winner2, tablet */
+@media screen and (min-width: 589px) and (max-width: 710px) {
+	#pn-main {
+		width: 500px;
+		margin: auto;
+	}
+
+	table {
+		max-width: 500px;
+	}
+}
+
+/* tablet, dex, phone landscape */
+@media screen and (min-width: 711px) and (max-width: 1023px) {
+	#pn-main {
+		width: 640px;
+		margin: auto;
+	}
+
+	table {
+		max-width: 640px;
+	}
+}
+
+/* tablet, dex, phone landscape */
+@media screen and (min-width: 1024px) {
+	#pn-main {
+		width: 840px;
+		margin: auto;
+	}
+
+	table {
+		max-width: 840px;
+	}
+}

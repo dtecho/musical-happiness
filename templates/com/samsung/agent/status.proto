@@ -1,0 +1,445 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.status";
+
+package viv;
+
+// CES will throw errors to the client in the format described below.
+
+// GRPC error format
+// {
+//   code: GrpcStatusCode
+//   details: <High level error message derived from VivErrorCode>
+// }
+
+// GRPC Metadata:
+// error-id: <Unique id that can be used to search internal logs for more detailed info.
+//             Can be shown to a user.>
+// error-code: VivErrorCode (99% of errors will come with a code AUTH_REGION_INVALID = 3002)
+// error-name: The key of VivErrorCode (eg AUTH_REGION_INVALID) for readability purposes
+// details: <Extended details about the failure if available. Internal logs usually has more info.>
+// data: <JSON-stringified data that relates to the error if available.>
+// error-extended: <Extended error logs, usually from 3rd party services - only available in dev
+//                      environments. Format can be a string or JSON string.>
+
+// Example:
+// {
+//   code: 3 (INVALID_ARGUMENT)
+//   details: "Auth region is missing"
+// }
+
+// GRPC Metadata:
+// error-id: "err-abder32"
+// error-code: 3002
+// error-name: "AUTH_REGION_INVALID"
+// details: "Send a proper language parameter"
+// error-extended: "..."
+
+// from https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
+// This is sent as a high level code in the grpc error
+enum GrpcErrorCode {
+    // Not an error; returned on success
+    // Not used at all in errors
+    // HTTP Mapping: 200 OK
+    OK = 0;
+
+    // The operation was cancelled, typically by the caller.
+    //
+    // HTTP Mapping: 499 Client Closed Request
+    CANCELLED = 1;
+
+    // Unknown error.  For example, this error may be returned when
+    // a `Status` value received from another address space belongs to
+    // an error space that is not known in this address space.  Also
+    // errors raised by APIs that do not return enough error information
+    // may be converted to this error.
+    //
+    // HTTP Mapping: 500 Internal Server Error
+    UNKNOWN = 2;
+
+    // The client specified an invalid argument.  Note that this differs
+    // from `FAILED_PRECONDITION`.  `INVALID_ARGUMENT` indicates arguments
+    // that are problematic regardless of the state of the system
+    // (e.g., a malformed file name).
+    //
+    // HTTP Mapping: 400 Bad Request
+    INVALID_ARGUMENT = 3;
+
+    // The deadline expired before the operation could complete. For operations
+    // that change the state of the system, this error may be returned
+    // even if the operation has completed successfully.  For example, a
+    // successful response from a server could have been delayed long
+    // enough for the deadline to expire.
+    //
+    // HTTP Mapping: 504 Gateway Timeout
+    DEADLINE_EXCEEDED = 4;
+
+    // Some requested entity (e.g., file or directory) was not found.
+    //
+    // Note to server developers: if a request is denied for an entire class
+    // of users, such as gradual feature rollout or undocumented whitelist,
+    // `NOT_FOUND` may be used. If a request is denied for some users within
+    // a class of users, such as user-based access control, `PERMISSION_DENIED`
+    // must be used.
+    //
+    // HTTP Mapping: 404 Not Found
+    NOT_FOUND = 5;
+
+    // The entity that a client attempted to create (e.g., file or directory)
+    // already exists.
+    //
+    // HTTP Mapping: 409 Conflict
+    ALREADY_EXISTS = 6;
+
+    // The caller does not have permission to execute the specified
+    // operation. `PERMISSION_DENIED` must not be used for rejections
+    // caused by exhausting some resource (use `RESOURCE_EXHAUSTED`
+    // instead for those errors). `PERMISSION_DENIED` must not be
+    // used if the caller can not be identified (use `UNAUTHENTICATED`
+    // instead for those errors). This error code does not imply the
+    // request is valid or the requested entity exists or satisfies
+    // other pre-conditions.
+    //
+    // HTTP Mapping: 403 Forbidden
+    PERMISSION_DENIED = 7;
+
+    // The request does not have valid authentication credentials for the
+    // operation.
+    //
+    // HTTP Mapping: 401 Unauthorized
+    UNAUTHENTICATED = 16;
+
+    // Some resource has been exhausted, perhaps a per-user quota, or
+    // perhaps the entire file system is out of space.
+    //
+    // HTTP Mapping: 429 Too Many Requests
+    RESOURCE_EXHAUSTED = 8;
+
+    // The operation was rejected because the system is not in a state
+    // required for the operation's execution.  For example, the directory
+    // to be deleted is non-empty, an rmdir operation is applied to
+    // a non-directory, etc.
+    //
+    // Service implementors can use the following guidelines to decide
+    // between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`:
+    //  (a) Use `UNAVAILABLE` if the client can retry just the failing call.
+    //  (b) Use `ABORTED` if the client should retry at a higher level
+    //      (e.g., when a client-specified test-and-set fails, indicating the
+    //      client should restart a read-modify-write sequence).
+    //  (c) Use `FAILED_PRECONDITION` if the client should not retry until
+    //      the system state has been explicitly fixed.  E.g., if an "rmdir"
+    //      fails because the directory is non-empty, `FAILED_PRECONDITION`
+    //      should be returned since the client should not retry unless
+    //      the files are deleted from the directory.
+    //
+    // HTTP Mapping: 400 Bad Request
+    FAILED_PRECONDITION = 9;
+
+    // The operation was aborted, typically due to a concurrency issue such as
+    // a sequencer check failure or transaction abort.
+    //
+    // See the guidelines above for deciding between `FAILED_PRECONDITION`,
+    // `ABORTED`, and `UNAVAILABLE`.
+    //
+    // HTTP Mapping: 409 Conflict
+    ABORTED = 10;
+
+    // The operation was attempted past the valid range.  E.g., seeking or
+    // reading past end-of-file.
+    //
+    // Unlike `INVALID_ARGUMENT`, this error indicates a problem that may
+    // be fixed if the system state changes. For example, a 32-bit file
+    // system will generate `INVALID_ARGUMENT` if asked to read at an
+    // offset that is not in the range [0,2^32-1], but it will generate
+    // `OUT_OF_RANGE` if asked to read from an offset past the current
+    // file size.
+    //
+    // There is a fair bit of overlap between `FAILED_PRECONDITION` and
+    // `OUT_OF_RANGE`.  We recommend using `OUT_OF_RANGE` (the more specific
+    // error) when it applies so that callers who are iterating through
+    // a space can easily look for an `OUT_OF_RANGE` error to detect when
+    // they are done.
+    //
+    // HTTP Mapping: 400 Bad Request
+    OUT_OF_RANGE = 11;
+
+    // The operation is not implemented or is not supported/enabled in this
+    // service.
+    //
+    // HTTP Mapping: 501 Not Implemented
+    UNIMPLEMENTED = 12;
+
+    // Internal errors.  This means that some invariants expected by the
+    // underlying system have been broken.  This error code is reserved
+    // for serious errors.
+    //
+    // HTTP Mapping: 500 Internal Server Error
+    INTERNAL = 13;
+
+    // The service is currently unavailable.  This is most likely a
+    // transient condition, which can be corrected by retrying with
+    // a backoff.
+    //
+    // See the guidelines above for deciding between `FAILED_PRECONDITION`,
+    // `ABORTED`, and `UNAVAILABLE`.
+    //
+    // HTTP Mapping: 503 Service Unavailable
+    UNAVAILABLE = 14;
+
+    // Unrecoverable data loss or corruption.
+    //
+    // HTTP Mapping: 500 Internal Server Error
+    DATA_LOSS = 15;
+}
+
+// This is used in the grpc error "error-code" field
+// See data/error-messages.json for exact messaging
+// If you update or add codes, update data/error-messages.json as well
+enum VivErrorCode {
+    // A failure that has not been categorized
+    UNKNOWN_FAILURE = 0;
+
+    // The 3rd party host (eg ASR, TTS, NL) is unavailable
+    HOST_NOT_FOUND = 1;
+
+    // grpc serialization issue - the outgoing message to the client could not be
+    // serialized to grpc binary data
+    GRPC_SERIALIZATION_FAILURE = 10;
+
+    // grpc deserialization issue - the incoming grpc binary data from the client could not be
+    // deserialized to a grpc message
+    GRPC_DESERIALIZATION_FAILURE = 11;
+
+    // The x-bixby-client-id grpc metadata value is not on the whitelist
+    INVALID_BIXBY_CLIENT_ID = 12;
+
+    // The x-bixby-client-version grpc metadata value does not follow semver rules
+    INVALID_BIXBY_CLIENT_VERSION = 13;
+
+    // Client is not supported
+    UNSUPPORTED_BIXBY_CLIENT = 14;
+
+    // The viv request event type is unrecognized
+    VIV_REQ_UNKNOWN_EVENT = 1000;
+
+    // The app context was sent twice
+    APP_CONTEXT_ALREADY_SENT = 1010;
+
+    // The app context is missing a required parameter
+    APP_CONTEXT_VALIDATION_FAIL = 1011;
+
+    // The ASR service encountered a failure
+    ASR_FAIL = 2000;
+
+    // ASR init metadata was sent twice
+    ASR_METADATA_ALREADY_SENT = 2001;
+
+    // ASR init metadata was not sent
+    ASR_METADATA_NOT_SENT = 2002;
+
+    // ASR request timed out
+    ASR_TIMEOUT = 2003;
+
+    // A required param is either missing or of an invalid format
+    ASR_VALIDATION_FAIL = 2004;
+
+    // The ASR transcribed the audio as empty text; no NL will be executed
+    // as a result
+    ASR_TRANSCRIBED_AS_EMPTY_TEXT = 2005;
+
+    // This is when ASR returns
+    // "failed to receive dash msg"
+    //
+    // This means that
+    // ASR did not receive complete audio data
+    // (eg AsrRequest.end = true)
+    // or audio data was not consistently sent
+    // in a reasonable amount of time
+    // (eg client connection is instable to CES)
+    ASR_AUDIO_DATA_INCOMPLETE = 2006;
+
+    // An ASR event that was sent was not recognized
+    ASR_REQ_UNKNOWN_EVENT = 2007;
+
+    // ASR2 InitEvent already sent
+    ASR_INIT_ALREADY_SENT = 2008;
+
+    // ASR2 InitEvent not sent
+    ASR_INIT_NOT_SENT = 2009;
+
+    // triggerVoiceRecognition was set to true in VivRequest, and
+    // ASR responded with voiceRecognitionInvalid (original user could not be matched with voice),
+    // but CES can not execute NL in guest mode as fallback,
+    // because deviceOwnerOauthToken is not defined
+    ASR_MATCH_FAIL_GUEST_NOT_DEFINED = 2010;
+
+    // The request was sent with voice recognition enabled
+    // but the account has not enrolled their voice with ASR yet
+    ASR_VOICE_ENROLLMENT_REQUIRED = 2011;
+
+    // The ASR service itself has an issue.
+    // Contact the ASR wrapper team for support
+    // todo: mark reserved when https://github.com/grpc/grpc-node/issues/499 is fixed
+    ASR_UNAVAILABLE = 2012 [deprecated = true];
+
+    // When the ASR transcribed the audio as empty text and isNoisy was true,
+    // CES will return ASR_AUDIO_TOO_NOISY instead of ASR_TRANSCRIBED_AS_EMPTY_TEXT.
+    // And no NL will be executed
+    ASR_AUDIO_TOO_NOISY = 2013;
+
+    // ASR prepare has timed out because CES has not received prepareResult from ASR for an extended period since sending prepareData
+    ASR_PREPARE_TIMEOUT = 2014;
+
+    // (DEPRECATED) NotSelectedAsMdwExecutor message is used to notify the same condition as this
+    // error code. NotSelectedAsMdwExecutor also has an optional field to set a message to display
+    NOT_SELECTED_AS_MDW_EXECUTOR = 2015;
+
+    // MDW Manager returned empty ASR text to this device because another device using on-device
+    // Bixby accepted the utterance. This is not an error, but a signal to instruct client to close
+    // Bixby UI, just like it does for ASR_TRANSCRIBED_AS_EMPTY_TEXT
+    ASR_EMPTY_TEXT_SET_BY_ON_DEVICE_ACCEPT = 2016;
+
+    // -- IMPORTANT --
+    // Error codes >= 2500 and < 3000 are reserved for on-device Bixby!
+    // See VAPI-1913 for more details...
+
+    // Authorization validation failed
+    AUTH_CHECK_FAILED = 3000;
+
+    // CES-related internal failure related to auth
+    AUTH_INTERNAL_FAIL = 3001;
+
+    // The auth region is invalid
+    AUTH_REGION_INVALID = 3002;
+
+    // The auth service call timed out
+    AUTH_TIMEOUT = 3003;
+
+    // There was an issue parsing the auth token data
+    AUTH_TOKEN_PARSE_FAILURE = 3004;
+
+    // The auth system is unavailable or unreachable
+    AUTH_UNAVAILABLE = 3005;
+
+    // The service id has been blocked and cannot be used again
+    AUTH_SERVICE_ID_BLOCKED = 3006;
+
+    // The account is undergoing a user-initiated personal data clearing operation
+    AUTH_ACCOUNT_LOCKED_PENDING_DATA_CLEAR = 3007;
+
+    // The account does not exist
+    AUTH_ACCOUNT_NOT_FOUND = 3008;
+
+    // Device is not linked in companion app
+    // device linking onboarding is required
+    AUTH_DEVICE_NOT_LINKED = 3009;
+
+    // GRPC metadata is missing a required value
+    GRPC_METADATA_VALIDATION_FAIL = 4000;
+
+    // The metadata event was already sent
+    METADATA_EVENT_ALREADY_SENT = 5000;
+
+    // The metadata event was not sent
+    METADATA_EVENT_NOT_SENT = 5001;
+
+    // The metadata event is missing required parameters
+    METADATA_EVENT_VALIDATION_FAIL = 5002;
+
+    // The BOS platform has sent an uncategorized error
+    BOS_PLATFORM_ERROR = 6000;
+
+    // The BOS platform could not process the service call
+    BOS_PLATFORM_FUNC_RESPONSE_FAIL = 6001;
+
+    // The BOS platform call timed ot
+    BOS_PLATFORM_TIMEOUT = 6002;
+
+    // The BOS platform is missing a required parameter
+    BOS_PLATFORM_VALIDATION_FAIL = 6003;
+
+    // The NL create conversation endpoint is failing
+    BOS_PLATFORM_CREATE_CONVO_FAIL = 6004;
+
+    // In CES dev mode, the capsuleContext must be specified
+    // This is sent if it is not
+    CAPSULE_CONTEXT_NOT_SPECIFIED = 6005;
+
+    // In CES dev mode, if the developer is not authorized to
+    // work with the specified capsuleContext
+    CAPSULE_EXECUTION_NOT_AUTHORIZED = 6006;
+
+    // Capsule ID is not formatted properly, or does not exist
+    CAPSULE_ID_INVALID = 6007;
+
+    // The developer does not have access to execute this revision id (used for on-device testing)
+    CAN_REVISION_EXECUTION_NOT_AUTHORIZED = 6008;
+
+    // Can revision ID is not formatted properly, or does not exist (used for on-device testing)
+    CAN_REVISION_ID_INVALID = 6009;
+
+    // BOS cannot execute the specified capsule revision because the capsule was compiled with a CAN runtime that is
+    // lower than the BOS runtime
+    CAPSULE_RUNTIME_VERSION_INCOMPATIBLE = 6010;
+
+    // The specified organizational namespace does not exist.
+    ORG_DOES_NOT_EXIST = 6011;
+
+    // The specified capsule name is not registered within the specified organizational namespace.
+    CAPSULE_DOES_NOT_EXIST = 6012;
+
+    // The user is not a member of the specified organization...
+    ORG_USER_NOT_MEMBER = 6013;
+
+    // BOS refresh conversation endpoint is failing
+    BOS_PLATFORM_REFRESH_CONVO_FAIL = 6014;
+
+    // The refresh conversation event is missing a required parameter
+    REFRESH_CONVERSATION_EVENT_VALIDATION_FAIL = 6015;
+
+    // The TTS service has an uncategorized error
+    TTS_FAIL = 7000;
+
+    // The TTS service has timed out
+    TTS_TIMEOUT = 7001;
+
+    // The TTS service is missing a required parameter
+    TTS_VALIDATION_FAIL = 7002;
+
+    // Observation data could not be parsed
+    OBSERVATION_PARSE_FAIL = 8000;
+
+    // Performance tracking errors
+    PERF_FAIL = 8010;
+
+    // Failure in submitting analytics
+    ANALYTICS_FAIL = 8015;
+
+    // Failure in PDSS
+    PDSS_FAIL = 8020;
+
+    // Failure in dev center API
+    DEV_CENTER_API_FAIL = 8025;
+
+    // Failure in NES.
+    NES_FAIL = 8030;
+
+    // Client sent an empty IntentRequest, and failed to send the
+    // NaturalLanguageInputEvent top-level gRPC message within the
+    // allotted time (60 seconds by default)
+    WAIT_FOR_NL_INPUT_TIMEOUT = 9000;
+
+    // Client sent the NaturalLanguageInputEvent top-level gRPC message,
+    // but did not preliminarily send an empty IntentRequest in the
+    // MetadataEvent message...
+    UNEXPECTED_NL_INPUT_EVENT = 9001;
+
+    // Client opened gRPC connection, and failed to send the MetadataEvent within the allotted time
+    // (15 seconds by default). To avoid this error, Client needs to close the connection
+    // immediately after it decides not to send MetadataEvent, within the allotted time.
+    WAIT_FOR_METADATA_EVENT_TIMEOUT = 9002;
+
+    // The device context event contains unparsable json
+    DEVICE_CONTEXT_EVENT_VALIDATION_FAIL = 1012;
+}

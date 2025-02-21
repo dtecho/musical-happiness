@@ -1,0 +1,285 @@
+<html>
+    <head>
+        <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <style type="text/css">
+         html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+         margin: 0;
+         padding: 0;
+         border: 0;
+         font-size: 100%;
+         font: inherit;
+         vertical-align: baseline;
+         }
+         label {
+         cursor: default;
+         }
+         * {
+         -webkit-appearance: none;
+         -webkit-tap-highlight-color: rgba(255,255,255,0);
+         -webkit-touch-callout: none !important;
+         box-sizing: border-box;
+         font-family: Cern,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+         -webkit-font-variant-ligatures: common-ligatures;
+         font-variant-ligatures: common-ligatures;
+         text-rendering: optimizeLegibility;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         user-select: none
+         }
+         .threads {
+         font-family: Cern,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+         }
+         body {
+         -webkit-font-smoothing: antialiased;
+         color: #fff;
+         direction: ltr;
+         font-family: Cern,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+         font-size: 17px;
+         font-weight: 400;
+         }
+         body {
+         line-height: 1;
+         }
+         :root {
+         --reach-dialog: 1;
+         }
+         html {
+         -ms-text-size-adjust: 100%;
+         -webkit-text-size-adjust: 100%;
+         font-size: 62.5%;
+         }
+         .threads *, .threads *::before, .threads *::after {
+         box-sizing: border-box;
+         -webkit-font-variant-ligatures: common-ligatures;
+         -webkit-font-smoothing: antialiased;
+         font-variant-ligatures: common-ligatures;
+         text-rendering: optimizeLegibility;
+         }
+         *:after, *:before {
+         box-sizing: border-box;
+         outline: none;
+         }
+         .Pane--is-plaid-branded {
+         background-color: #fff;
+         color: #111;
+         }
+         .threads a {
+         color: #111;
+         text-decoration: none;
+         }
+         .Pane {
+         display: flex;
+         flex: 1 1 auto;
+         flex-direction: column;
+         overflow: hidden;
+         position: relative;
+         }
+         .PaneContent {
+         -webkit-overflow-scrolling: touch;
+         flex: 1 1 auto;
+         overflow-x: hidden;
+         overflow-y: auto;
+         padding: 0 calc((100% - 280px) / 2);
+         padding-bottom: constant(safe-area-inset-bottom);
+         padding-bottom: env(safe-area-inset-bottom);
+         position: relative;
+         scrollbar-width: thin;
+         }
+         .threads .PaneContent {
+         padding-left: 3.2rem;
+         padding-right: 3.2rem;
+         }
+         .App__content {
+         display: flex;
+         flex-direction: column;
+         height: 100%;
+         z-index: 11111;
+         }
+         .ChallengePane__challenge .ntk-attribution {
+         position: absolute;
+         bottom: 5px;
+         left: 0px;
+         background-color: #cdcbcbb3;
+         padding: 0px 5px;
+         padding-bottom: 1px;
+         font-size: 9px;
+         color: #555;
+         border-top-right-radius: 3px;
+         border-bottom-left-radius: 2px;
+         }
+         .ChallengePane__challenge .ntk-attribution a {
+         color: #555;
+         }
+         .ChallengePane__challenge .captcha-container > div {
+         position: relative;
+         }
+         .ChallengePane__challenge .captcha-container {
+         position: relative;
+         text-align: center;
+         padding-bottom: 4px;
+         }
+         .ChallengePane__challenge .captcha-container .caption {
+         font-weight: normal;
+         margin-bottom: 5px;
+         }
+         .ChallengePane__challenge .arrow-key-button {
+         /*position: absolute;*/
+         padding: 10px;
+         margin: auto 5px;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: space-around;
+         background-color: #7a7984;
+         border: 1px solid #3e3e46;
+         border-radius: 3px;
+         text-align: center;
+         }
+         .ChallengePane__challenge .captcha-container img.captcha {
+         margin: 0px;
+         border-radius: 4px;
+         padding-bottom: 4px;
+         }
+         .ChallengePane__challenge .click-indicator {
+         position: absolute;
+         box-shadow: 0px 0px 5px 1px #7bd2ec;
+         background-color: lightblue;
+         border-radius: 100%;
+         }
+         .ChallengePane__challenge .square {
+         position: absolute;
+         background-color: red;
+         }
+         .ChallengePane__challenge .path-captcha-container {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         }
+         .ChallengePane__challenge .path-captcha-container .ntk-attribution {
+         left: 50%;
+         -webkit-transform: translateX(-50%);
+         transform: translateX(-50%);
+         border-bottom-left-radius: 0px;
+         border-top-left-radius: 2px;
+         }
+         .ChallengePane__challenge .split .ntk-attribution {
+         box-shadow: 0 0 3px 0 #555;
+         bottom: 1px;
+         left: 50%;
+         -webkit-transform: translateX(-50%);
+         transform: translateX(-50%);
+         border-bottom-left-radius: 0px;
+         border-top-left-radius: 2px;
+         }
+         .ChallengePane__challenge img.captcha.split {
+         border-radius: 0px;
+         }
+         .ChallengePane__challenge .wheel-button-strip {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         }
+         .ChallengePane__challenge .wheel-container {
+         margin-top: 2px;
+         position: relative;
+         }
+         .ChallengePane__challenge .wheel {
+         position: relative;
+         overflow: hidden;
+         }
+         .ChallengePane__challenge .wheel.horizontal {
+         display: flex;
+         flex-direction: row;
+         }
+         .ChallengePane__challenge .wheel.vertical {
+         margin: 3px;
+         width: 120px;
+         height: 125px;
+         }
+         .ChallengePane__challenge .wheel img {
+         position: relative;
+         margin: 0px;
+         padding: 0px;
+         border-radius: 0px;
+         }
+         .ChallengePane__challenge .arrow {
+         width: 17px;
+         }
+         .ChallengePane__challenge .arrow-button {
+         display: flex;
+         padding: 12px;
+         margin: 0px 5px;
+         border-radius: 5px;
+         background-color: #7a7984;
+         border: 1px solid #3e3e46;
+         }
+         .ChallengePane__challenge .arrow-button:hover {
+         cursor: pointer;
+         }
+         .ChallengePane__challenge div.shadow {
+         box-shadow: #141313 2px 0px 5px 0px inset, #141313 -2px 0px 5px 0px inset;
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         border-radius: 2px;
+         top: 0;
+         left: 0;
+         }
+         .ChallengePane__challenge div.shadow:after {
+         box-shadow: -25px 0 55px -30px inset black;
+         border-radius: 3px;
+         content: " ";
+         height: 100%;
+         right: 0px;
+         position: absolute;
+         top: 0;
+         width: 100%;
+         }
+         .ChallengePane__challenge div.shadow:before {
+         box-shadow: 25px 0 55px -30px inset black;
+         border-radius: 3px;
+         content: " ";
+         height: 100%;
+         left: 0px;
+         position: absolute;
+         top: 0;
+         width: 100%;
+         }
+
+        </style>
+        <script
+                type="text/javascript"
+                id="javaScriptChallengeCallback">
+         function onSuccess(message) {
+           console.log("ZDS!");
+           console.log(message);
+         }
+        </script>
+    </head>
+    <body style="background-color: white;">
+        <div class="App__content">
+            <div class="Pane ChallengePane Pane--is-plaid-branded threads">
+                <div class="PaneContent ChallengePane__challenge">
+                    <div
+                            id="challenge"
+                            class="challenge"></div>
+                </div>
+            </div>
+        </div>
+        <script src="<CHALLENGE>"></script>
+        <script>
+        var protoTranslations = <PROTO_TRANSLATIONS>
+        window._plaid_setupChallenge(
+          'CHALLENGE_TYPE_SHIBBOLETH',
+          <INITIALIZATION_OPTIONS>,
+          (key) => protoTranslations[key],
+          onSuccess,
+          document.getElementById('challenge'),
+          () => null,
+        )
+        </script>
+    </body>
+</html>

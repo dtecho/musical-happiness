@@ -1,0 +1,9 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_ptBR",
+    "goal": "EVENT_NY_Q6",
+    "utterance": "Você tem alguma história de Ano-Novo?",
+    "dateTimeInterval.start": "2022-01-01T00:00:00",
+    "dateTimeInterval.end": "2022-01-01T23:59:59"
+  }
+]

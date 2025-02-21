@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.serverInfo";
+
+package viv;
+
+message ServerInfoRequest {}
+
+message ServerInfoResponse {
+    // Version of the CES that the client is connected to
+    string serverVersion = 1;
+
+    // Version of the protobuf definitions CES is using
+    // See releases here:
+    // https://github.ecodesamsung.com/bixby-platform/capsule-exec-protobuf/releases
+    string protobufDefVersion = 2;
+
+    // Git commit hash of the current codebase
+    string commitHash = 3;
+}

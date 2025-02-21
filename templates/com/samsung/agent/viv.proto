@@ -1,0 +1,2091 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.viv";
+
+import "asr.proto";
+import "asr2.proto";
+import "tts.proto";
+import "story.proto";
+import "codec.proto";
+import "shared.proto";
+
+package viv;
+
+message VivRequest {
+    // VivRequest is one of the following:
+    oneof type {
+        // Initial packet to describe the request
+        Metadata MetadataEvent = 1;
+
+        // Streaming speech data
+        // This is to be deprecated - use Asr2SpeechToText / Asr2AudioData instead
+        Asr AsrEvent = 2 [deprecated = true];
+
+        // Update geo position (if changed/more accurate)
+        GeoPosition GeoPositionEvent = 3;
+
+        // Send response to ClientFunctionCall Platform event
+        FunctionResponse FunctionResponseEvent = 4;
+
+        // Send 3rd party application data; this should only be sent
+        // after sending VivRequest.MetadataEvent with waitForAppContext set to true
+        AppContext AppContextEvent = 5;
+
+        // When Metadata.waitForAppContext is set, the CES request is in a
+        // waiting state, waiting for data from the client to be sent back
+        // to CES. There may be cases that the 3rd party app the client is
+        // waiting on may crash or just time out. This allows the client to
+        // tell CES to stop waiting and be able to receive new events for
+        // the request.
+        AppContextTimeout AppContextTimeoutEvent = 6;
+
+        // Abort any current or pending NL calls for the current request
+        AbortCapsuleExecution AbortCapsuleExecutionEvent = 7;
+
+        // ASR2 Audio Data event - use when using Asr2SpeechToText mode
+        Asr2Request.AudioData Asr2AudioData = 8;
+
+        // Update list of apps installed on the device, if changed / more accurate than
+        // the original list sent in MetadataEvent.capabilities.apps - see VIV-32006.
+        InstalledApps UpdateInstalledAppsEvent = 9;
+
+        // ASR2 Vocab Data event - use when using Asr2SpeechToText mode
+        Asr2Request.VocabData Asr2VocabData = 10;
+
+        // Message sent by devices with on-device ASR (aka eASR)
+        // See definition of the NaturalLanguageInput message below for more information.
+        // Also see VAPI-1860.
+        NaturalLanguageInput NaturalLanguageInputEvent = 11;
+
+        // Provide the device context data asynchronously; this should only be sent
+        // after sending VivRequest.MetadataEvent with waitForDeviceContext set to true.
+        // This should not be sent if device context has already been provided through
+        // MetadataEvent.deviceContext. Should the client do so, DeviceContextEvent will
+        // be ignored.
+        DeviceContext DeviceContextEvent = 12;
+
+        // When Metadata.waitForDeviceContext is set, the CES request is in a
+        // waiting state, waiting for data from the client to be sent back
+        // to CES. There may be cases that the 3rd party app the client is
+        // waiting on may crash or just time out. This allows the client to
+        // tell CES to stop waiting.
+        DeviceContextTimeout DeviceContextTimeoutEvent = 13;
+
+        // Provide the MDE context, including MDW participants, asynchronously;
+        // This should not be sent if MDE context has already been provided through
+        // MetadataEvent.mdeContext. Should the client do so, MdeContextEvent will
+        // be ignored.
+        MdeContext MdeContextEvent = 14;
+
+        // When Metadata.waitForMdeContext is set, the CES request is in a waiting state, waiting for
+        // data from the client to be sent back to CES. If the client cannot send MdeContext for an
+        // unexpected reason, this event allows the client to tell CES.
+        MdeContextTimeout MdeContextTimeoutEvent = 15;
+
+        // Provide the device state asynchronously; This should not be sent if the device state has
+        // already been provided through MetadataEvent.deviceState. Should the client do so,
+        // DeviceStateEvent will be ignored.
+        DeviceState DeviceStateEvent = 16;
+
+        // When Metadata.waitForDeviceState is set, the CES request is in a waiting state, waiting for
+        // data from the client to be sent back to CES. If the client cannot send DeviceState for an
+        // unexpected reason, this event allows the client to tell CES to stop waiting.
+        DeviceStateTimeout DeviceStateTimeoutEvent = 17;
+    }
+
+    message Metadata {
+        reserved 19 /* AuthorizationRequest */;
+
+        // (required) What CAN to use
+        CanDescriptor can = 1;
+
+        // (required) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+        string conversationId = 2;
+
+        // (required) Client-generated requestId. Should be unique.
+        // Format is Unix Epoch Timestamp in Milliseconds
+        // Note: requestId is a uint64 because 3rd party services like ASR / TTS
+        // require that the request id be a milisecond timestamp
+        uint64 requestId = 3;
+
+        // (optional) Id of prior request (in same conversation) to use as context
+        uint64 priorRequestId = 4;
+
+        // (required) Olson format timezone string
+        string timezone = 5;
+
+        // (optional) Geo position
+        GeoPosition geo = 6;
+
+        // (optional) Request streaming TTS by setting this
+        // Note: tts.conversationId and tts.requestId will be *ignored*
+        // since you are supplying those values in the metadata here
+        TtsParams tts = 7;
+
+        // (optional) Indicates an AppContext event will be coming
+        // Puts the request into a waiting state, waiting for the AppContext event
+        // if the wait is too long, or the client ends the connection early,
+        // VivResponse.AppContextWaitAborted will be sent
+        bool waitForAppContext = 8;
+
+        // (optional) OAuth callback url (required to support OAuth)
+        string oauthCallbackUrl = 9;
+
+        // (required) Capabilities
+        Capabilities capabilities = 21;
+
+        // rampcode - acoustic model to apply for ASR (mobile|tv|speaker)
+        // use TTSParams + AsrParams instead
+        string rampcode = 22 [deprecated = true];
+
+        // eg SM-G965N
+        string deviceModel = 23;
+
+        // 2-letter ISO alpha country code
+        // to identify which capsules you may
+        // be able to "install"
+        string storeCountry = 24;
+
+        // name/version of the client that sent the request
+        // (eg bixby2-mobile-1.0.1)
+        // used for logging purposes
+        // DEPRECATED - use x-bixby-client-id and x-bixby-client-version grpc metadata instead
+        string clientVersion = 25 [deprecated = true];
+
+        // (optional) Client-generated requestId. Should be unique.
+        // This is used only by the IDE (see viv-client-sdk-js project)
+        // See VAPI-1892 (description and comments)
+        string requestIdStr = 26;
+
+        // (optional) Id of prior request (in the same conversation) to use as context.
+        // This is used only by the IDE (see viv-client-sdk-js project)
+        // See VAPI-1892 (description and comments)
+        string priorRequestIdStr = 27;
+
+        // (optional) The device CSC / product code
+        // more info: https://www.all-things-android.com/content/changing-samsung-csc-product-code
+        string customerServiceCode = 28;
+
+        // (optional) If the device uses a 24 hour display for time
+        bool is24HourFormat = 29;
+
+        // (optional) stringified-JSON representing the device context that will be will be made
+        // accessible to capsules (VAPI-631). In case client wants to supply device context
+        // asynchronously, it should leave this field empty and sets waitForDeviceContext = true;
+        // then supply the data through DeviceContext event.
+        string deviceContext = 30;
+
+        // (optional) developer specific options
+        ExecutionContext executionContext = 31;
+
+        // ASR2 specific params
+        // use when using Asr2SpeechToText
+        Asr2Params asr2Params = 32;
+
+        // The input method that generated the request
+        InputSourceType inputSourceType = 33;
+
+        // See description of MdeContext message.
+        MdeContext mdeContext = 34;
+
+        // (optional) See VAPI-1506 and VBOS-6811
+        // Since we are moving towards a "One Bixby" strategy, i.e. a single CAN,
+        // we need to allow capsules to differentiate between devices, for example
+        // in marketplace constraints, so that (for example) a capsule targetting
+        // a robot vacuum does not become available to the fridge device...
+        // This is what the `deviceSubtype` property is for.
+        string deviceSubtype = 35;
+
+        // Indicate what kind of request this is
+        oneof type {
+            // Speech-based NL request
+            AsrRequest AsrRequest = 10 [deprecated = true];
+
+            // Textual intent (NL, Aligned, Sixtree) request
+            IntentRequest IntentRequest = 11;
+
+            // Request result details
+            DetailsRequest DetailsRequest = 12;
+
+            // Request layout
+            LayoutRequest LayoutRequest = 13;
+
+            // Revisit a decision
+            RevisitDecisionRequest RevisitDecisionRequest = 14;
+
+            // Asynchronous request (currently used for form submission)
+            AsyncRequest AsyncRequest = 16;
+
+            // Refresh request
+            RefreshRequest RefreshRequest = 18;
+
+            // Legacy request that was used to pass the CP authorization code
+            // to BOS in order to complete the OAuth flow. This was deprecated
+            // in January 2019 and the code was removed from CES in July 2019,
+            // after giving all client teams enough time to update their code.
+            // I commented out this line because if I had not, the protobuf
+            // compiler would still generate code for it, which would be too
+            // tempting for a rogue client team to use... But I kept the line
+            // here to show that id#19 is reserved forever!
+            // AuthorizationRequest AuthorizationRequest = 19 [deprecated = true];
+
+            // Autocomplete request
+            AutocompleteRequest AutocompleteRequest = 20;
+
+            // Playback a demo stream
+            DemoRequest DemoRequest = 100;
+
+            // Does not perform any kind of request
+            // This is only used for internal CES testing via unit / integration testing
+            // This allows a test client to send gRPC messages to the CES without them
+            // causing a downstream request to be sent.
+            NoRequest NoRequest = 101;
+
+            // ASR2 speech-based NL request
+            // Note: Asr2Request.SpeechToText.geo will be ignored
+            // Define VivRequest.Metadata.geo instead
+            Asr2Request.SpeechToText Asr2SpeechToText = 102;
+
+            // In a multi-device situation, if you have a speaker device and a tv device
+            // When you make an intent via the speaker device, BOS will comm to the IoT bridge
+            // to inform the TV to make the RemoteViewRequest to render content
+            RemoteViewRequest RemoteViewRequest = 103;
+
+            // When BOS decides that the execution should happen for a "remote executor" device (eg, a request is
+            // initiated on a phone, but BOS determines that a TV is the intended device for the execution), BOS tells the
+            // "Virtual Intent Handler" (VIH) service, which informs the remote executor device to request to
+            // join the execution by calling CES with this event.
+            //
+            // Difference between RemoteViewRequest and AttachExecutionRequest:
+            //
+            // - RemoteViewRequest: Remote device is passive, and only gets the layout/dialog content, or simple commands
+            // (such as raise / lower volume). The remote device may or may not have Bixby integration.
+            //
+            // - AttachExecutionRequest: Remote device is actively participating in the request (or even running
+            // the bulk of the execution, such as receiving client function calls). The device is integrated with Bixby
+            // as it may have to do actual execution work.
+            AttachExecutionRequest AttachExecutionRequest = 104;
+
+            // Story request based on the new endpoint /story/page
+            StoryRequest StoryRequest = 105;
+        }
+
+        DeviceState deviceState = 36;
+
+        // Specify the condition in which BOS sends StartListening event (default: HefOnly)
+        ListeningMode listeningMode = 37;
+
+        // Provides the list of experiment ids, bucket labels, and bucket payload for this request.
+        // These are obtained by the Bixby client via the SXP SDK, and passed by CES to some
+        // of the downstream systems so that they may run experiments.
+        repeated ExperimentAssignment experimentAssignments = 38;
+
+        enum ContinuousConversationMode {
+            // A placeholder enum to prevent client from accidentally using the default value
+            UNKNOWN = 0;
+            // ASR will check more sensitively whether the utterance is Cancel or not
+            // BOS will handle Cancel based on `startListeningAfterCancelEnabled` option
+            WAIT_FOR_CANCEL = 1;
+            // ASR will check more sensitively whether the utterance is Snooze or not. This option
+            // has been deprecated in favor of WAIT_FOR_ALARM_SNOOZE and WAIT_FOR_TIMER_SNOOZE to
+            // provide information about what is being snoozed.
+            WAIT_FOR_SNOOZE = 2 [deprecated=true];
+            // ASR will check more sensitively whether the utterance is Alarm Snooze or not
+            WAIT_FOR_ALARM_SNOOZE = 3;
+            // ASR will check more sensitively whether the utterance is Timer Snooze or not
+            WAIT_FOR_TIMER_SNOOZE = 4;
+        }
+
+        // Specify any number (including zero) of continuous conversation modes, which affect the
+        // ASR transcription and BOS response (See VBOS-8319). An empty list indicates that
+        // continuous conversation mode is disabled.
+        repeated ContinuousConversationMode continuousConversationModes = 39;
+
+        // (optional) Indicates an DeviceContext event will be coming
+        // Puts the request into a waiting state, waiting for the DeviceContext event
+        // if the wait is too long, or the client ends the connection early,
+        // VivResponse.DeviceContextWaitAborted will be sent
+        bool waitForDeviceContext = 40;
+
+        // (optional) a JSON-formatted string used by the client to pass various data that can be
+        // used by ASR to improve transcription quality (such as 'priorGoalId', 'visible_app_list').
+        // See VAPI-2131 for details.
+        string asrContext = 41;
+
+        // (optional) Indicates that an MdeContextEvent will be coming. Puts the request into a
+        // waiting state, waiting for the MdeContextEvent. If the wait is too long, or the client
+        // ends the connection early, VivResponse.MdeContextWaitAborted will be sent
+        bool waitForMdeContext = 42;
+
+        // (optional) Indicates that an DeviceStateEvent will be coming. Puts the request into a
+        // waiting state, waiting for the DeviceStateEvent. If the wait is too long, or the client
+        // ends the connection early, VivResponse.DeviceStateWaitAborted will be sent
+        bool waitForDeviceState = 43;
+
+        // (optional) Specify the method used to make Bixby ASR start listening.  This field is
+        // relevant only for ASR case, when inputSourceType is VOICE.
+        LaunchMethod launchMethod = 44;
+
+        // (optional) Specify the device name, which is displayed when user is prompted to pick a
+        // device to execute the query on (VAPI-2491).
+        string deviceName = 45;
+    }
+
+    message AttachExecutionRequest {}
+
+    // Specify the method used to enter the user's utterance
+    enum InputSourceType {
+        // The default value to be used when the input method is not provided by the client
+        UNKNOWN = 0;
+        // The user's utterance is transcribed using ASR
+        VOICE = 1;
+        // The user's utterance is typed using a keyboard
+        KEYBOARD = 2;
+        // The user's utterance is entered by tapping a conversation driver
+        CONVERSATION_DRIVER = 3;
+        // The user's utterance is entered by tapping a capsule hint in Capsule Details page
+        HINT = 4;
+    }
+
+    // Specify the method used to make Bixby ASR start listening.
+    // Note that this field may seem redundant with deviceIsInHandsFreeMode. It is actually not
+    // redundant because the info cannot be derived from deviceIsInHandsFreeMode. While
+    // deviceIsInHandsFreeMode: true is mapped to VoiceWakeup in mose devices, on some device
+    // (Buds), deviceIsInHandsFreeMode: true is mapped to ButtonPress.
+    enum LaunchMethod {
+        // The default value to be used when the launch method is not provided by the client
+        Unknown = 0;
+        // Bixby ASR was started by voicing a wakeup word
+        VoiceWakeup = 1;
+        // Bixby ASR was started by pressing Bixby button
+        ButtonPress = 2;
+        // Bixby ASR was started by tapping Bixby icon on a touch display
+        IconTouch = 3;
+        // Bixby ASR was started by using some other method
+        Other = 4;
+    }
+
+    enum ListeningMode {
+        // BOS will only send a StartListening event in the relevant moments if the request was made in hands-free mode
+        HefOnly = 0;
+        // BOS will always send a StartListening event in the relevant moments
+        Always = 1;
+        // BOS will never send a StartListening event
+        Never = 2;
+    }
+
+    message Asr2Params {
+        // (required) rampcode - acoustic model to apply for ASR (mobile|tv|speaker)
+        string rampcode = 1;
+
+        // (optional, with exceptions) acoustic model that applies to a specific device in conjunction with the
+        // rampcode, which accounts for the # of microphones / mic type / noise suppression a device has.
+        // required when using VoiceEnrollment or SpeechToText.triggerVoiceRecognition = true
+        string deviceProfile = 2;
+
+        // If true, the ASR server will not save the audio to its storage system
+        // This is to be deprecated. Use enableSavingAudio instead.
+        bool disableSavingAudio = 3 [deprecated=true];
+
+        /*(required) If it is set to true, ASR will save audio at storage. */
+        bool enableSavingAudio = 4;
+
+        enum AsrMode {
+            // This is to support older clients.
+            UNSPECIFIED = 0;
+
+            // Normal behavior. Only ASR service runs ASR engine.
+            SERVER = 1;
+
+            // The client runs on-device ASR engine first.
+            // ASR service runs server ASR engine only if the on-device result is rejected.
+            ON_DEVICE = 2;
+        }
+
+        // (optional) Indicates whether or not on-device ASR is enabled for this request.
+        AsrMode asrMode = 5;
+
+        // (optional) The client is able to tell CES whether or not this request was started at a prompt
+        // (the information was passed down to the client in the CapsuleExecutionInterrupted or the
+        // CapsuleRequestFinished message) That information is then passed to ASR to prevent it from
+        // cutting the audio off at 5 seconds in case of silence (in this case, ASR has a longer timeout)
+        // See VAPI-1943
+        bool isPrompt = 6;
+
+        // (optional) Indicates whether ASR should wait longer than specified threshold (5 sec) for
+        // several exception cases (e.g. in continuous conversation mode, client opens mic during
+        // TTS is playing - VAPI-2098; low-end TV cannot open mic as fast as other devices). ASR
+        // service is integrating all of these exceptional cases into `asrWaitLonger` flag.
+        bool asrWaitLonger = 7;
+
+        // (optional) Indicates whether this device should be given the priority or not when MDW Manager
+        // selects a listener winner among MDW participants. For example, the field is set true when the
+        // device is connected to earbuds (VMAIN-23408).
+        bool isPriorityListener = 8;
+    }
+
+    message NoRequest {
+        // If true, closes the server connection right after the
+        // event is consumed
+        bool closeConnection = 1;
+    }
+
+    // (optional) NL-type request options
+    // that control how execution is performed when running
+    message ExecutionContext {
+        DeveloperParams developerParams = 1;
+
+        // (optional) specifies the capsule context that this execution is running in
+        // eg viv.recipe
+        string capsuleContext = 2;
+
+        // (optional) developer-specific / IDE params
+        message DeveloperParams {
+            // (optional) defines "now"
+            int64 timeOverrideSeconds = 1;
+
+            // (optional) Enable/disable machine learning
+            bool deterministicMode = 2;
+
+            // (optional) Enable/disable conversation learning
+            bool conversationLearn = 3;
+
+            // (optional) specifies a web cache file
+            string webCacheFile = 4;
+
+            enum WebCacheMode {
+                // Only use cache, do not make any network requests
+                offline = 0;
+                // Use cache if available, otherwise make live network requests
+                live = 1;
+                // Ignore cache, always make live network requests
+                ignore = 2;
+            }
+
+            // Specifies how the web cache is used when making requests
+            WebCacheMode webCacheMode = 5;
+
+            // (optional) Flag used to instruct BOS whether to send `WrappedDebugEvent`,
+            // which is remapped to `CapsuleExecutionDebug` and eventually consumed by
+            // the IDE Debug Console. See API-1554.
+            bool enableDebugEvents = 6;
+
+            // (optional) mapping of mocked dynamic PDSS user data to be used for the dynamic user data Gazetteer
+            string pdssDataMocksJson = 7;
+
+            // (optional) Options for the LLM, a JSON string that looks like the below:
+            // { "optionSets": ["a", "b"], "TemplateToReplaceablePromptMap": { "foo": "bar", "hello": "world" } }
+            string llmOptionsJson = 8;
+        }
+    }
+
+    message CanDescriptor {
+        // (required) Natural Language in ISO format (e.g. "en-US")
+        string language = 1;
+        // (optional) Target CAN Revision
+        string revision = 2;
+        // (optional) Target workspaceId
+        string workspaceId = 3;
+    }
+
+    message AsrRequest {
+        // (required) Audio encoding
+        AudioCodec codec = 1;
+        // (required) Audio sample rate
+        int32 sampleRateHertz = 2;
+        // (optional) Auto-endpoint on server (if supported)
+        bool autoEndpoint = 3;
+        // (optional) Speech provider to use
+        viv.AsrRequest.Provider provider = 4;
+
+        // (optional) Wakeup parameters
+        viv.AsrRequest.Metadata.Wakeup wakeup = 5;
+
+        // (optional) enables voice recognition for the purpose of
+        // identifying the user behind the voice
+        bool triggerVoiceRecognition = 6;
+
+        // (optional) The oauth token for the device owner
+        // this is used for a multi-user scenario like a speaker system that has a core owner
+        // and other registered users on it
+        //
+        // In the multi-user scenario, two account tokens are sent:
+        // - the assumed user, which the auth token is sent via the grpc metadata headers
+        // - deviceOwnerOauthToken, which is an auth token for the owner of the device
+        //
+        // During an ASR request with triggerVoiceRecognition = true, ASR will attempt to
+        // match the assumed user against the incoming voice data
+        //
+        // If the voice data does not match the assumed user, then ASR will send the
+        // VoiceRecognitionInvalid message to CES
+        //
+        // CES will then auth the deviceOwnerOauthToken and make a request to BOS using the NL
+        // returned from ASR with a guest flag set to true to execute only guest capsules under the
+        // deviceOwnerOauthToken account
+        //
+        // This value should be defined like the 'Authorization' header
+        //
+        // example value:
+        // Bearer test:owner-token
+        string deviceOwnerOauthToken = 7;
+    }
+
+    // In a multi-device situation, if you have a speaker device and a tv device
+    // When you make an intent via the speaker device, BOS will comm to the IoT bridge
+    // to inform the TV to make the RemoteViewRequest to render content
+    message RemoteViewRequest {
+        // (required) an opaque reference to a view
+        string viewRef = 1;
+
+        // (required) the original conversation id that was made by the original device
+        string referenceConversationId = 2;
+
+        // (required) the original request id that was made by the original device
+        string referenceRequestId = 3;
+    }
+
+    message IntentRequest {
+        // (optional) Clients may decide to pass this now, or use the NaturalLanguageInputEvent
+        // top-level gRPC message if they wish to send an NL string later in the execution.
+        // In particular, this is used when running ASR on device.
+        oneof intent {
+            // Sixtree intent
+            string sixtree = 1;
+            // NL intent
+            string nl = 2;
+            // Aligned-NL intent
+            string aligned = 3;
+        }
+
+        // (optional) developer specific options
+        // deprecated, use Metadata.executionContext instead
+        ExecutionContext executionContext = 7 [deprecated = true];
+    }
+
+    message DetailsRequest {
+        // (required) Result id
+        string resultId = 1;
+        // (deprecated) Reference id
+        string refId = 2 [deprecated = true];
+
+        // (optional) developer specific options
+        // deprecated, use Metadata.executionContext instead
+        ExecutionContext executionContext = 3 [deprecated = true];
+    }
+
+    message LayoutRequest {
+        // (optional) Deferred layout id
+        repeated string layoutIds = 1;
+        // (required) Layout mode (e.g. 'summary' or 'details')
+        string mode = 2;
+    }
+
+    message RevisitDecisionRequest {
+        // (required) Decision id from ExecutionDecisions.Decision
+        string decisionId = 1;
+    }
+
+    message AsyncRequest {
+        // (required) Sixtree intent
+        string sixtree = 1;
+    }
+
+    message RefreshRequest {
+        // (required) Sixtree intent
+        string sixtree = 1;
+
+        // (optional) developer specific options
+        // deprecated, use Metadata.executionContext instead
+        ExecutionContext executionContext = 2 [deprecated = true];
+    }
+
+    message AutocompleteRequest {
+        // (optional) Search string
+        string search = 1;
+
+        // (optional) developer specific options
+        // deprecated, use Metadata.executionContext instead
+        ExecutionContext executionContext = 2 [deprecated = true];
+    }
+
+    message DemoRequest {
+        // (required) Identifier of demo request (talk to frontend team to get list of ids)
+        string id = 1;
+    }
+
+    message TtsParams {
+        // (optional) Specify voice to use
+        string voice = 1;
+        // (optional) Specify audio codec
+        AudioCodec codec = 2;
+        // (optional) TTS provider to use
+        TtsRequest.Provider provider = 3;
+
+        // (required) rampcode - acoustic model to apply for TTS (mobile|tv|speaker)
+        string rampcode = 4;
+    }
+
+    message Asr {
+        oneof type {
+            // Raw speech data
+            bytes data = 1;
+            // End of stream
+            bool end = 2;
+        }
+    }
+
+    message FunctionResponse {
+        // (required) Should match serviceCallId from ClientFunctionCall
+        string serviceCallId = 1;
+        oneof type {
+            // Could not execute
+            FunctionFailure failure = 2;
+            // JSON-encoded results
+            string resultJson = 3;
+        }
+    }
+
+    message AppContext {
+        // (required) Native app id
+        string appId = 1;
+        // (required) Version of native app
+        string appVersion = 2;
+        // Capsule id
+        string capsuleId = 3;
+        // (required) blob to be converted into context by capsule-provided mapper
+        string contextBlob = 4;
+    }
+
+    message AppContextTimeout {
+        // Timeout reason / error message
+        string reason = 1;
+    }
+
+    message DeviceContext {
+        // JSON-encoded device context to be sent asynchronously when waitForDeviceContext is true
+        // Note that, when waitForDeviceContext is false, the data is sent synchronously through
+        // Metadata.deviceContext
+        string json = 1;
+    }
+
+    message DeviceContextTimeout {
+        // Timeout reason / error message
+        string reason = 1;
+    }
+
+    message MdeContextTimeout {
+        // Timeout reason / error message
+        string reason = 1;
+    }
+
+    message DeviceStateTimeout {
+        // Timeout reason / error message
+        string reason = 1;
+    }
+
+    message AbortCapsuleExecution {
+        // Message explaining, in plain english, the reason why the client
+        // suddenly decided to abort the capsule execution.
+        // Examples: User hit the back button, User pressed the Bixby key, etc.
+        // This is logged by CES to StackDriver, and used ONLY for debugging.
+        string reason = 1;
+    }
+
+    message Capabilities {
+        // (optional) Device is in locked state
+        bool deviceLocked = 1;
+
+        // (optional) Device is in hands-free mode
+        bool deviceIsInHandsFreeMode = 2;
+
+        repeated App apps = 3;
+
+        // (optional) If true, the device can execute any capsule while in the
+        // locked state. In this mode, the device will not receive the unlock
+        // event from BOS.
+        bool allowLocked = 4;
+
+
+        // (optional) The device sets this field true if it has the ability to compare the current
+        // voice against the previously enrolled one and the voice is matched successfully.
+        bool voiceMatched = 7;
+
+        // (optional) A list of capsule usage scopes for which the user has opted to use voice match
+        // feature. voiceMatchScopes is an empty list if the user has not opted for any scope.
+        repeated VoiceMatchScope voiceMatchScopes = 8;
+
+        // Most of the flags in this message will likely be temporary, until
+        // the corresponding feature has been widely adopted by all clients.
+        message ClientFeatures {
+            // See API-1575 (YouTrack)
+            bool capsuleLockInSupported = 1;
+            // See API-1544 (YouTrack)
+            bool enhancedCapsulePermissionsSupported = 2;
+            // See VAPI-1244.
+            bool mdeSupported = 3;
+            // See VAPI-1484.
+            bool icpSupported = 4;
+            // See VAPI-1545.
+            bool resultCapsuleLockInSupported = 5;
+            // See VAPI-1570.
+            bool ttsForAppLaunchSupported = 6;
+            // (optional) HEF version supported by the client
+            uint32 hefVersion = 7;
+            // (optional) Lets the client identify itself as wanting to conduct an e2e performance analysis
+            bool performanceAnalysisEnabled = 8;
+            // See VAPI-1843.
+            bool flexibleViewEnabled = 9;
+            // Set children privacy protection mode, which makes BOS treat all relevant permissions as denied (VAPI-2058)
+            bool childrenPrivacyProtectionMode = 10;
+            // Enable BOS to send StartListening when user says 'cancel' or its equivalent for
+            // continuous conversation (VAPI-2098/VBOS-8319). Note that this BOS behavior is used
+            // only when the device is NOT in one of the cancellable device states defined in EMC
+            // spec (e.g. alarm ringing) because BOS should perform EMC cancel behavior in those states.
+            bool startListeningAfterCancelEnabled = 11;
+            // Enable BOS to use the enhanced list navigation behavior based on Voice UX design spec
+            // when Client sets deviceIsInHandsFreeMode true (VAPI-2086)
+            bool enhancedListNavigationSupported = 12;
+            // Enable BOS to send StoryOAuth and StoryActionResults events so the IDE Simulator can record them as part
+            // of the Story
+            bool storyRecordingEnabled = 13;
+            // Indicate that the client supports a special authorization flow that allows parents to
+            // handle permission prompt for their children. See VAPI-2385.
+            bool linkedParentalAccountSupported = 14;
+            // Indicates that this client is a test client for which BOS should not send events to
+            // Kafka so that neither analytics nor execution learning are tainted by test traffic
+            bool isTestClient = 15;
+            // MDW (Multi-Device Wakeup) version supported by the client
+            uint32 mdwVersion = 16;
+            // Indicate that the client allows the user to specify scopes (e.g. PersonalData,
+            // SmartHomeControl) for using voice match feature. See VAPI-2422.
+            bool voiceMatchScopeSupported = 17;
+            // The "smart capsule pick" feature should not be enabled in BOS if the client
+            // does not support overriding the platform decision, hence this flag:
+            bool smartCapsulePickerSupported = 18;
+            // For select targets with this flag enabled, allow capsule developers to work with the LLM.
+            bool llmPluginModeSupported = 19;
+        }
+
+        // (optional) Features supported by a specific client implementation.
+        ClientFeatures clientFeatures = 5;
+
+        //        // (optional) Device has a screen
+        //        Screen deviceScreen = 5;
+        //        message Screen {
+        //            // (required) Screen width in points
+        //            uint32 width = 1;
+        //            // (required) Screen height in points
+        //            uint32 height = 2;
+        //            // (required) Screen pixel to point ratio
+        //            float pixelRatio = 3;
+        //            // (optional) Screen has touch input
+        //            bool touch = 4;
+        //            // (optional) Screen has cursor input (e.g. mouse or some other analog input)
+        //            bool cursor = 6;
+        //        }
+        //        // (optional) Supports directional input (e.g. remote control, or directional pad on car)
+        //        bool deviceHasDirectionalInput = 6;
+        //        // (optional) Device has a camera
+        //        // need to separate into front and back camera
+        //        bool deviceHasCamera = 7;
+        //        // (optional) Device has a microphone
+        //        bool deviceHasMicrophone = 8;
+        //        // (optional) Device has a speaker
+        //        bool deviceHasSpeaker = 9;
+        //
+        //        // (optional) Current connection type (cellular/wifi/ethernet)
+        //        Connection connectionType = 10;
+        //        enum Connection {
+        //            UNKNOWN = 0;
+        //            WIRED = 1;
+        //            WIFI = 2;
+        //            SLOW_CELLULAR = 3;
+        //            FAST_CELLULAR = 4;
+        //        }
+
+        message HefContext {
+            // (optional) The start index of the current HEF focus in the result list. Omit this
+            // field if the result list has no HEF focus.
+            uint32 focusStart = 1;
+            // (optional) The last focus size received from BOS. Omit this field if not avaialble.
+            uint32 focusSize = 2;
+        }
+
+        // (optional) A context describing the HEF-related state on the client.
+        HefContext hefContext = 6;
+    }
+
+    message App {
+        // (required) Native app id
+        string appId = 1;
+        // (required) Native app version
+        string appVersion = 2;
+    }
+
+    message InstalledApps {
+        repeated App apps = 1;
+    }
+
+    // For MDE, BOS requires the `smartThingsDeviceId` *or* the `smpToken` (depending on the device type)
+    // for the participating devices to send out-of-band messages. Those could be delivered to BOS via the
+    // `deviceContext` object on page requests. However, this would be problematic because:
+    //     1. `deviceContext` is supposed to be completely opaque to BOS
+    //        (only the receiving capsule is aware of its schema)
+    //     2. `deviceContext` is handed to capsules. Having the `smartThingsDeviceId` or the `smpToken`
+    //        handed to capsules would clearly be a major security issue.
+    // This is why we introduced the following new message type as part of VAPI-1241.
+    message MdeContext {
+        string smartThingsDeviceId = 1;
+        string smpToken = 2;
+        string pairedDeviceId = 3;
+        // (optional) The list of MDW Participants
+        repeated string participants = 4;
+        // (optional) The list of quick commands
+        repeated string quickCommands = 5;
+    }
+
+    // Specify if the device is currently ringing/vibrating and/or if a media app is
+    // currently active.
+    message DeviceState {
+        message RingerState {
+            enum RingerType {
+                Alarm = 0;
+                Phone = 1;
+                Timer = 2;
+                Other = 3;
+                Calendar = 4;
+                Reminder = 5;
+            }
+
+            // (optional) Type of app that is causing the ringing/vibrating
+            RingerType type = 1;
+
+            // (optional) Id of app that is causing the ringing/vibrating
+            string appId = 2;
+        }
+
+        message MediaState {
+            enum PlaybackState {
+                Playing = 0;
+                Paused = 1;
+                FastForwarding = 2;
+                Rewinding = 3;
+            }
+
+            enum MediaType {
+                Music = 0;
+                Video = 1;
+                News = 2;
+                Audiobook = 3;
+                Podcast = 4;
+                Tv = 5;
+                Other = 6;
+            }
+
+            // Playback state of app
+            PlaybackState state = 1;
+
+            // (optional) Type of media
+            MediaType type = 2;
+
+            // (optional) Id of media app
+            string appId = 3;
+        }
+
+        RingerState ringerState = 1;
+        MediaState mediaState = 2;
+
+        // Deprecated in favor of screenState/powerState (VAPI-2457)
+        bool screenOn = 4 [deprecated = true];
+        bool powerOn = 5 [deprecated = true];
+
+        // Deprecated in favor of foregroundApps (VAPI-2490)
+        repeated string foregroundAppIds = 6 [deprecated = true];
+
+        // Examples:
+        //   Robot Cleaner is cleaning a room.      -> OperationState.Active
+        //   Robot Cleaner is doing nothing.        -> OperationState.Idle
+        //   Dryer is actively drying clothes       -> OperationState.Active
+        //   Dryer is paused by door open.          -> OperationState.Paused
+        //   Dryer is doing nothing.                -> OperationState.Idle
+        //   OperationState is not applicable to TV -> OperationState.Unknown
+        enum OperationState {
+            // The operation state is not relevant or cannot be determined for the device
+            Unknown = 0;
+            // The device is actively working/running
+            Active = 1;
+            // The device is paused (applicable only if it can be paused)
+            Paused = 2;
+            // The device is doing nothing
+            Idle = 3;
+        }
+
+        // Specify the operation state of the device.
+        OperationState operationState = 7;
+
+        enum ScreenState {
+            ScreenUnknown = 0; // The screen state is unspecified or irrelevant for the device.
+            ScreenOn = 1;
+            ScreenOff = 2;
+        }
+
+        enum PowerState {
+            PowerUnknown = 0; // The power state is unspecified or irrelevant for the device.
+            PowerOn = 1;
+            PowerOff = 2;
+        }
+
+        enum InUseState {
+            InUseUnknown = 0; // The in-use state is unspecified or irrelevant for the device.
+            InUse = 1;
+            NotInUse = 2;
+        }
+
+        ScreenState screenState = 8;
+        PowerState powerState = 9;
+        InUseState inUseState = 10;
+
+        message ForegroundApp {
+            // (required) The package ID of the app
+            string packageId = 1;
+            // (optional) The label of the app
+            string label = 2;
+        }
+
+        // 'repeated' is used to handle the multi-window condition with multiple foreground apps
+        repeated ForegroundApp foregroundApps = 11;
+    }
+
+    message ExperimentAssignment {
+        // Experiment Id of this bucket
+        string id = 1;
+        // Bucket name assigned to this client, e.g., "red_btn"
+        string bucketLabel = 2;
+        // (optional) Bucket payload, e.g. button color "red"
+        string payload = 3;
+    }
+
+    // See VAPI-1860.
+    // When speech recognition is done on the device (on-device ASR, aka eASR), the device should use an
+    // `IntentRequest` but without sending the NL right away. Once the NL has been fully transcribed on the
+    // device, it is sent to CES using this gRPC message. If the `annotatedNL` value was provided, CES will
+    // send that string to NES for ITN (Inverse Text Normalization) / NE (Named Entity) correction
+    // (e.g., Nine pm -> 9:00 pm, www dot samsung dot com -> www.samsung.com) Otherwise, the raw NL string
+    // is sent to BOS right away. By that time, the user will have been authenticated, the PDSS cache will
+    // have been primed, the conversation will have been created, etc.
+    message NaturalLanguageInput {
+        // (required) The *raw* NL string transcribed by eASR.
+        // e.g. "Play shape of you by ed shiran"
+        string nl = 1;
+
+        // (optional) Annotated NL string, containing markers from NE (Named Entity) detection ([text]<label>)
+        // e.g., "Play [shape of you]<music> by [ed shiran]<music>"
+        // If provided, CES should first attempt to send this string to NES for ITN/NE correction.
+        // In the above example, CES would receive "Play Shape Of You by Ed Sheeran" in the NES response:
+        // nesResponseBody -> asrResult -> formattedHypothesis -> [forNlExecution | forClientDisplay] -> text]
+        string annotatedNL = 2;
+      }
+}
+
+message FunctionFailure {
+    enum FailureType {
+        Generic = 0;
+        Informative = 1;
+        Validation = 2;
+        // See VAPI-1991:
+        Permission = 3;
+        // See VAPI-2356:
+        AppDisabled = 4;
+    }
+
+    // (optional)
+    FailureType type = 1;
+
+    // (optional) If a Validation error, this should specify the input that failed
+    string inputName = 2 [deprecated = true];
+
+    // (optional)
+    string message = 3;
+
+    // (optional)
+    int32 code = 4;
+
+    // (optional)
+    string appLabel = 5;
+}
+
+message VivResponse {
+    oneof type {
+        // Streaming speech transcription events
+        AsrResponse AsrResponse = 1 [deprecated = true];
+
+        // Streaming text-to-speech audio data
+        TtsResponse TtsResponse = 2;
+
+        // Events that should be passed to the Result Renderer
+        RendererEvent RendererEvent = 3;
+
+        // Response dialog to display on the screen
+        Message Message = 4;
+
+        // Indicates that this asynchronous request should start on a new page
+        NewPage NewPage = 5;
+
+        // Indicates that a previous page should be removed from the history
+        DeletePage DeletePage = 6;
+
+        // List of decisions made by the platform
+        ExecutionDecisions ExecutionDecisions = 7;
+
+        // Information about the capsule that was selected
+        // Deprecated - Use CapsuleExecutionStarting instead
+        // Note - the Protobuf spec does not allow the usage of
+        // the reserved keyword in a oneof
+        // This is to be eventually removed completely
+        CapsuleInfo CapsuleInfo = 8 [deprecated=true];
+
+        // Additional insight into how NLU processed the request
+        NlHighlighting NlHighlighting = 9;
+
+        // There are no results for this request
+        NoResults NoResults = 10;
+
+        // Provides a list of native action buttons the user can select to make
+        // a new request or interact with the Result Renderer
+        Actions Actions = 11;
+
+        // Prompt the user for authenticating with an OAuth service
+        AuthorizationPrompt AuthorizationPrompt = 13;
+
+        // Requesting data from a client service (must respond with
+        // FunctionResponse even if the feature is not supported)
+        ClientFunctionCall ClientFunctionCall = 14;
+
+        // Start a client-side timer to automatically update the screen using
+        // a new request
+        RefreshIntent RefreshIntent = 15;
+
+        // Payment prompt
+        SpsPaymentPrompt SpsPaymentPrompt = 16;
+
+        // renderer lifecycle events (seems to be client-side only)
+        BeginExecution beginExecution = 17;
+        EndExecution endExecution = 18;
+
+        // New x-viv-host value to use for future requests
+        // used for sticky sessions on platform
+        // issued by HAProxy sitting in front of platform
+        XVivHost XVivHost = 19;
+
+        // Used to display a list of alternative capsules that the
+        // user can switch to for a query
+        CapsulePivot CapsulePivot = 20;
+
+        // https://sixfivelabs.myjetbrains.com/youtrack/issue/UI-609
+        // platform sent for starting / ending exec of a capsule
+        CapsuleExecutionStarting CapsuleExecutionStarting = 21;
+        CapsuleExecutionFinished CapsuleExecutionFinished = 22;
+
+        // https://sixfivelabs.myjetbrains.com/youtrack/issue/API-563
+        // Allows for ability to punch out to an application at end of exec
+        AppLaunch AppLaunch = 23;
+
+        // This is used to notify the client that the CES app context lock has
+        // been released for the CES session, either after a timeout set in CES
+        // has elapsed, or after receiving the AppContextTimeout message from
+        // the client. This message is *informational* only, and may be used by
+        // clients to stop processing the app context if they don't themselves
+        // have a built-in timeout, or use a timeout that is greater than the
+        // value set in the CES config (10 seconds by default)
+        AppContextWaitAborted AppContextWaitAborted = 24;
+
+        // Information about the capsule execution service
+        // sent after connection is established
+        // can be safely ignored - used for debugging / informational purposes
+        CesServerInfo CesServerInfo = 25;
+
+        // Data for creating a request to a payment gateway
+        PaymentGatewayInvocation PaymentGatewayInvocation = 26;
+
+        // When the companion app required for a client-endpoint in a capsule is not installed
+        // (or the installed version is to low), the platform will interrupt and send this event.
+        // This information might be useless as the user will just install/update whatever
+        // the newest version in the appstore is,
+        ClientAppInstallation ClientAppInstallation = 27;
+
+        // When the platform encounters that the device is locked but needs to be unlocked for
+        // execution, this event is sent
+        Unlock Unlock = 28;
+
+        // https://sixfivelabs.myjetbrains.com/youtrack/issue/API-736
+        CapsuleExecutionInterrupted CapsuleExecutionInterrupted = 29;
+
+        // This message is scoped to the entire request; it differs from the existing
+        // CapsuleExecutionFinished/CapsuleExecutionInterrupted messages, which are
+        // scoped to an execution and can occur multiple times in a single request.
+        // This is used for QC (Quick Commands) See VIV-28619 and API-1581.
+        CapsuleRequestFinished CapsuleRequestFinished = 45;
+
+        // Displayable data about inputs that have been relaxed
+        // eg if no results found in a 5m radius
+        // input might be relaxed to do 10m instead
+        InputRelaxations InputRelaxations = 30;
+
+        // https://sixfivelabs.myjetbrains.com/youtrack/issue/API-846
+        // communicates to the client that Bixby NLU was unable to interpret the NL
+        NoInterpretation NoInterpretation = 31;
+
+        // BOS `ErrorEvent` is remapped to `CapsuleExecutionError`
+        CapsuleExecutionError CapsuleExecutionError = 32;
+
+        // When BOS needs to prompt for system-level permissions
+        SystemPermission SystemPermission = 33 [deprecated = true];
+
+        // When BOS needs to prompt for capsule-level permissions
+        ServicePermission ServicePermission = 34 [deprecated = true];
+
+        // BOS cannot perform the execution on the capsule
+        PermissionDenied PermissionDenied = 35 [deprecated = true];
+
+        // ASR2 Response for ASR2 request types
+        Asr2Response Asr2Response = 36;
+
+        // Informs the client to start listening (open mic)
+        // he client should wait until all TTS streams are read, then begin listening
+        StartListening StartListening = 37;
+
+        // The `CesReady` message has been deprecated (see API-1518)
+        // Because some clients may still rely on it, CES will continue to send it.
+        // But we will remove support from it entirely soon!
+        CesReady CesReady = 38 [deprecated = true];
+
+        // When BOS has ended the connection to CES
+        // This generally means BOS has completed sending its events
+        BosConnectionFinished BosConnectionFinished = 39;
+
+        // When BOS interpreted the user utterance as a meta command. BOS sends this event as soon
+        // as it interprets the user utterance as a meta command, not after it has run the command.
+        MetaCommand MetaCommand = 40;
+
+        // The client should perform a store search for a particular category
+        StoreSearch StoreSearch = 41;
+
+        // See API-1561
+        // BOS `DebugEvent` is remapped to `CapsuleExecutionInfo`
+        CapsuleExecutionInfo CapsuleExecutionInfo = 42;
+
+        // See API-1554
+        // BOS `WrappedDebugEvent` is remapped to `CapsuleExecutionDebug`
+        CapsuleExecutionDebug CapsuleExecutionDebug = 43;
+
+        // See API-1575.
+        // This message is needed to implement the new Bixby conversation
+        // requirements. That feature was rushed before the marketplace
+        // launched, so don't be surprised if the definition of this message
+        // breaks some of the fundamental design principles of the Bixby API.
+        CapsuleLockIn CapsuleLockIn = 44;
+
+        // These messages were introduced as part of VAPI-1244 to support the new MDE UX.
+        // Note: "MDE" stands for Multi-Device Experience.
+        MdeLinked MdeLinked = 46;
+        StartNewConversation StartNewConversation = 47;
+
+        // See VAPI-1484 (In-Capsule Purchases)
+        IcpPaymentPrompt IcpPaymentPrompt = 48;
+
+        // This message is sent to the client when Driving Mode is enabled. Its `value` field
+        // specifies how the client should display the Bixby app in Driving Mode (Hidden, Compact,
+        // or Full). See VAPI-1543 for more details on how the driving mode boolean is computed from
+        // device context. BOS guarantees sending DrivingModeDisplay AFTER CapsuleExecutionStarting
+        // and BEFORE the first final dialog message or renderer event. This is to accommodate the
+        // fact that the client displays the Bixby app in foreground the moment it receives a final
+        // dialog message (=Message with temporary: false) or renderer event. Because
+        // DrivingModeDisplay affects how the client displays the app, it needs to get
+        // DrivingModeDisplay info before it receives any final dialog message or renderer event.
+        // During that period, BOS can send DrivingModeDisplay multiple times (up to 2 times)
+        // because the value can change over the course of capsule execution. The client should
+        // respect the value in the last DrivingModeDisplay message when it eventually displays the
+        // app for a final dialog message or renderer event. If the client does not receive any
+        // DrivingModeDisplay before a final dialog message or renderer message, it should assume
+        // that Driving Mode is not enabled and display the app in a normal, non-driving style.
+        DrivingModeDisplay DrivingModeDisplay = 49;
+
+        // This message is sent to the client when RendererEvent message for displaying a result
+        // list is sent in HEF mode (deviceIsInHandsFreeMode: true). It specifies the position and
+        // size of HEF focus to be displayed in the result list. When the client receives this
+        // event, it should memo the value of focusStart and focusSize and forward the information
+        // to Renderer through VivRenderer.onPagePatch(requestId, { type: 'HefFocus', focusStart:
+        // <number>, focusSize: <number>}). The memoed value should be copied to HefContext when the
+        // client sends a follow-up request. This is necessary for BOS to handle NL queries for
+        // relative list navigation (e.g. "Show me more" or "Next"). On devices with a display
+        // (mobile, watch, and TV), Renderer should modify the memoed value of focusStart when the
+        // user manually scrolls the page using touch screen, bazel wheel, or TV remote button. This
+        // allows the relative list navigation by voice to continue from results visible at the
+        // current scroll position.
+        HefFocus HefFocus = 50;
+
+        // This message is included in the response only when the client sets the
+        // performanceAnalysisEnabled flag to true.
+        PerformanceAnalysis PerformanceAnalysis = 51;
+
+        // See VAPI-1842.
+        ConversationTimeout ConversationTimeout = 52;
+
+        // See VAPI-1839.
+        VoiceSelectionVocab VoiceSelectionVocab = 53;
+
+        // See VAPI-1981.
+        CapsuleRequestReceived CapsuleRequestReceived = 54;
+        Interpretation Interpretation = 55;
+        CategoryParticipantResolution CategoryParticipantResolution = 56;
+
+        // See VAPI-2043.
+        ComponentSelectionState ComponentSelectionState = 57;
+
+        // VAPI-2100: Send interpretation information to end-user clients for analysis
+        EndUserInterpretation EndUserInterpretation = 58;
+
+        // This is used to notify the client that the CES device context lock has
+        // been released for the CES session, either after a timeout set in CES
+        // has elapsed, or after receiving the DeviceContextTimeout message from
+        // the client. This message is *informational* only, and may be used by
+        // clients to stop processing the app context if they don't themselves
+        // have a built-in timeout, or use a timeout that is greater than the
+        // value set in the CES config (10 seconds by default)
+        DeviceContextWaitAborted DeviceContextWaitAborted = 59;
+
+        StoryRecordingEvent StoryRecordingEvent = 60;
+
+        // This is used to notify the client that the waitForMdeContext lock has been released for
+        // the CES session, either after a timeout set in CES has elapsed, or after receiving the
+        // MdeContextTimeout message from the client. This message is *informational* only, and may
+        // be used by clients to stop preparing the MdeContext if they don't themselves have a
+        // built-in timeout, or use a timeout that is greater than the value set in the CES config
+        // (10 seconds by default)
+        MdeContextWaitAborted MdeContextWaitAborted = 61;
+
+        // Used to provide an extra dialog message (e.g. 'Open your phone to continue') to be shown
+        // on the cover display of a flip device if the flip device is in folded state.
+        RequireFullScreen RequireFullScreen = 62;
+
+        // Used to instruct the client to perform a special authorization flow that allows parents
+        // to handle permission prompt for their children
+        ClientParentalAuthorization ClientParentalAuthorization = 63;
+
+        // This is used to notify the client that the waitForDeviceState lock has been released for
+        // the CES session, either after a timeout set in CES has elapsed, or after receiving the
+        // DeviceStateTimeout message from the client. This message is *informational* only, and may
+        // be used by clients to stop preparing the DeviceState if they don't themselves have a
+        // built-in timeout, or use a timeout that is greater than the value set in the CES config
+        // (10 seconds by default)
+        DeviceStateWaitAborted DeviceStateWaitAborted = 64;
+
+        // See VAPI-2429 - This message is sent to the client to display the "snack bar", which
+        // allows the user to change the capsule selected for the specified category. Upon tapping
+        // the "snack bar", the client will simply execute the provided intent, which will then return
+        // a renderer event to display a list of capsules the user may choose from.
+        SmartCapsulePicker SmartCapsulePicker = 65;
+
+        // Used to notify the client that the device was not selected as an MDW executor and that
+        // the client should close Bixby UI optinally after displaying a message (e.g. 'Check the
+        // TV'). After receiving this message, client should use a new conv ID for next requests.
+        NotSelectedAsMdwExecutor NotSelectedAsMdwExecutor = 66;
+
+        // Used in IDE mode. When a capsule developer is
+        // working on a target, for which LLM is enabled, they need to see the JSON string of the
+        // request from the LLM, as well as the response from BOS to the LLM.
+        LlmDebug LlmDebug = 67;
+    }
+}
+
+message CapsuleLockIn {
+    // Capsule id, example: "1.2.3-viv.yelp".
+    // While the lock-in is in effect, `Metadata.executionContext.capsuleContext` should be set to this value
+    string capsuleId = 1;
+
+    // One of { "ElicitationPrompt", "SelectionPrompt", "ConfirmationPrompt", "FollowUpPrompt", "ListNavigationPrompt", "Result" }
+    string moment = 2;
+
+    // true if this is a "*Prompt" moment, false otherwise.
+    bool atPrompt = 3;
+
+    // If true, the client should clear the conversation context after the final timeout.
+    // This should be done by:
+    //    1. Transitioning the user to a new "timeout page"
+    //    2. Setting the priorRequestId to null for requests made from this page
+    // If false, the client should release the lock, but maintain the client context -- that is, return to the same behavior as when no CapsuleLockIn event is received.
+    // When the lock is released, the client should stop setting `Metadata.executionContext.capsuleContext` and all conversation drivers should be hidden.
+    bool clearContextOnTimeout = 4;
+
+    // The minimum amount of time to wait after the previous request's TTS finishes (or the final reprompt's TTS, if applicable) before ending the lock-in.
+    // The actual timeout should be `max(timeoutSec, ASR)`.
+    uint32 timeoutSec = 5;
+
+    message RePromptSpec {
+        // The minimum amount of time to wait after TTS ends before rendering the re-prompt.
+        // The actual timeout should be `max(timeoutSec, ASR)`.
+        uint32 timeoutSec = 1;
+        // The number of times to follow these re-prompt instructions.
+        uint32 numRePrompts = 2;
+        // The message to use when re-prompting.
+        Message message = 3;
+    }
+
+    // (optional) If present, contains the instructions for re-prompting after
+    // the timeout
+    RePromptSpec rePromptSpec = 6;
+
+    message VisualSpec {
+        // Capsule display name, example: "Yelp".
+        string displayName = 1;
+        // Capsule icon url.
+        string iconUrl = 2;
+        // Capsule bgColor, as defined in https://bixbydevelopers.com/dev/docs/reference/type/description.actionBgColor
+        string actionBgColor = 3;
+        // Capsule fgColor, as defined in https://bixbydevelopers.com/dev/docs/reference/type/description.actionFgColor
+        string actionFgColor = 4;
+    }
+
+    // (optional) Advanced; If present, contains a palette of values to be used
+    // to implement whatever client UX/UI we decide to ship.
+    VisualSpec visualSpec = 7;
+
+    // If a timeout page is rendered (see `clearContextOnTimeout` above), this is the message
+    // that should be rednered with it.
+    Message timeoutPageMessage = 8;
+}
+
+message StoreSearch {
+    // The category to search for in the store, eg "Music"
+    string category = 1;
+
+    // Localized version of the category
+    string localizedCategoryName = 2;
+
+    // For the following, one should be consumed by the client depending on the level
+    // of store support on the device
+
+    // message for devices with built-in store support
+    SpeechString nativeStorefrontUiMessage = 3;
+
+    // message for devices that have the store UI in a companion app (e.g. speaker)
+    SpeechString companionAppStorefrontUiMessage = 4;
+
+    // message for devices without store support
+    SpeechString preMarketplaceMessage = 5;
+}
+
+message BosConnectionFinished {}
+
+message MetaCommand {
+    // The meta command ID
+    string commandId = 1;
+}
+
+message CesReady {
+    // id generated by CES for this specific request, used for troubleshooting purposes
+    // when making a bug report, please use this value
+    string cesReqId = 1;
+}
+
+message StartListening {}
+
+message PermissionDenied {
+    // Text to show
+    SpeechString text = 1;
+
+    // (required) Permission to request access for
+    // See UserPermissionCode.java in BOS for definitions
+    int32 permissionCode = 2;
+}
+
+message ServicePermission {
+    // Text to show
+    SpeechString text = 1;
+
+    // (required) Permission to request access for
+    // See UserPermissionCode.java in BOS for definitions
+    int32 permissionCode = 2;
+
+    // Capsule id, eg "viv.bigOven"
+    string capsuleId = 3;
+
+    // Capsule name, eg "Recipes"
+    string displayName = 4;
+
+    // URL to capsule icon
+    string iconUrl = 5;
+}
+
+message SystemPermission {
+    // Text to show
+    SpeechString text = 1;
+
+    // (required) Permission to request access for
+    // See UserPermissionCode.java in BOS for definitions
+    int32 permissionCode = 2;
+}
+
+message CapsuleExecutionError {
+    // Low-level error details
+    string details = 1;
+
+    // High level error details
+    string error = 2;
+
+    // error code
+    int32 code = 3;
+}
+
+message CapsuleExecutionInfo {
+    // Low-level information about a specific execution condition
+    string details = 1;
+
+    // High level information about a specific execution condition
+    string message = 2;
+
+    // info code
+    int32 code = 3;
+}
+
+message CapsuleExecutionDebug {
+    // Opaque JSON blob consumed by the IDE Debug Console.
+    string json = 1;
+}
+
+message InputRelaxations {
+    repeated Relaxation relaxations = 1;
+
+    message Relaxation {
+        SpeechString type = 1;
+        SpeechString value = 2;
+    }
+}
+
+message Unlock {
+    // Text to show
+    SpeechString text = 1;
+
+    // If true, then BOS generated UnlockEvent from `unlock { voice-match-bypass (true) }`
+    bool voiceMatchBypass = 2;
+
+    // Used to communicate voiceMatchScope that was associated with `unlock { voice-match-bypass (true) }`
+    // when BOS generated UnlockEvent to Client. Client needs this info to guide the user to
+    // relevant Bixby Settings UI where they can enable voice match for the scope.
+    VoiceMatchScope voiceMatchScope = 3;
+}
+
+message ClientAppInstallation {
+    // (required) Application identifier on the store
+    string id = 1;
+
+    // (required) Url to the store
+    // ex: market://my-app-download-url
+    string storeUrl = 2;
+
+    // (required) Minimum app version to install
+    string version = 3;
+
+    // (optional) app name
+    string name = 4;
+}
+
+message PaymentGatewayInvocation {
+    enum PaymentInvocationHttpMethods {
+        GET = 0;
+        POST = 1;
+    }
+
+    // (required) http method
+    PaymentInvocationHttpMethods method = 1;
+
+    // (required) request URL of the payment gateway
+    string url = 2;
+
+    // (optional) request headers - JSON string of
+    // headers and their values
+    string headerParamsJson = 3;
+
+    // (optional) Post body data - can apply to any http method if present
+    string body = 4;
+
+    // (required) Callback url after request
+    string callbackUrl = 5;
+}
+
+message CesServerInfo {
+    // Version of the CES that the client is connected to
+    string version = 1;
+
+    // Version of the protobuf definitions CES is using
+    // See releases here:
+    // https://github.ecodesamsung.com/bixby-platform/capsule-exec-protobuf/releases
+    string protoDefsVersion = 2;
+}
+
+message AppContextWaitAborted {
+    // abort message
+    string message = 1;
+}
+
+message DeviceContextWaitAborted {
+    // abort message
+    string message = 1;
+}
+
+message MdeContextWaitAborted {
+    // abort message
+    string message = 1;
+}
+
+message DeviceStateWaitAborted {
+    // abort message
+    string message = 1;
+}
+
+message RequireFullScreen {
+    // Text to be shown on the cover display if the flip device is folded. SpeechString is used
+    // instead of plain string to align with BOS, which uses MultiModalString for the text.
+    SpeechString text = 1;
+}
+
+message ClientParentalAuthorization {
+    enum ParentalAuthorizationFlow {
+        NON_LINKED_CHILD_ACCOUNT = 0;
+        PARENTAL_CONSENT = 1;
+    }
+
+    // parentalAuthorizationFlow is either `NON_LINKED_CHILD_ACCOUNT` for displaying the parental
+    // authorization flow for non-linked child accounts or `PARENTAL_CONSENT` for displaying the
+    // parental authorization password flow.
+    ParentalAuthorizationFlow parentalAuthorizationFlow = 1;
+    // canType is used by the client to customize authorization UI based on device and language
+    string canType = 2;
+    // The intent to send by the client for a successful authorization. After client has
+    // successfully authenticated, it should send this intent.
+    string successIntent = 3;
+    // The intent to send by the client for a failed authorization, when client cancels or fails
+    // authentication, it should send this intent.
+    string failureIntent = 4;
+}
+
+message StoryRecordingEvent {
+    // Common payload to be used for both Story Action Results and Story OAuth
+    string json = 1;
+}
+
+message AppLaunch {
+    // (required) URI encoding the action for the client to take
+    // ex http://play.google.com/store/apps/details?id=com.google.android.apps.maps
+    string uri = 1;
+
+    // (required) an opaque JSON string encoding the action for the client to take
+    string payload = 2;
+
+    // (optional) string encoding the identifier of a required client application
+    string appId = 3;
+
+    // (optional) string encoding the minimum version of the required client application
+    string appMinVersion = 4;
+
+    // (optional) download link for a required application
+    string appStoreUrl = 5;
+
+    // (optional) application name
+    string appName = 6;
+
+    // (optional) app launch dialog for TTS
+    SpeechString text = 7;
+
+    // (optional) Indicates that renderer content was / is about to be sent
+    // to the client, along with this AppLaunch event.
+    // See https://sixfivelabs.myjetbrains.com/youtrack/issue/VIV-24313
+    // See https://github.com/six5/Six5/pull/8594
+    bool hasRenderedContent = 8;
+}
+
+message CapsuleExecutionScope {
+    // application id (eg android app id)
+    string appId = 1;
+
+    // Capsule name, eg "Uber"
+    string displayName = 2;
+
+    string iconUrl = 3;
+
+    // Capsule id, eg "viv.uber"
+    string capsuleId = 4;
+
+    // Output goal, ex: "viv.uber.Activity"
+    string goal = 5;
+
+    // Miliseconds since the request was made
+    int64 millisSinceRequest = 6;
+
+    // Scoped capsule id, ex "2.9.98-viv.uber"
+    string scopedCapsuleId = 7;
+
+    // Initial goal, ex "viv.uber.BookRideShare"
+    // only used by testing tools, not to be consumed
+    // by end-user clients
+    string goalSignal = 8;
+}
+
+// Beginning of capsule execution
+message CapsuleExecutionStarting {
+    string executionSessionId = 1;
+
+    CapsuleExecutionScope executionScope = 2;
+}
+
+// End of capsule execution
+message CapsuleExecutionFinished {
+    CapsuleExecutionScope executionScope = 1;
+
+    // If true, then the current page represents the active transaction
+    bool transactionCurrent = 2;
+
+    // If true, then there exists an active transaction
+    // so you could be at the finalize step for a hotel booking, and both would be true.
+    // and then you say "check the weather" before completing the booking,
+    // and that would have active=true, current=false.
+    bool transactionActive = 3;
+}
+
+message CapsuleExecutionInterrupted {
+    CapsuleExecutionScope executionScope = 1;
+
+    bool transactionCurrent = 2;
+    bool transactionActive = 3;
+
+    // true if the interruption requires a prompt to the user
+    bool isPrompt = 4;
+
+    // Additional information on why the execution was interrupted
+    string description = 5;
+}
+
+message CapsuleRequestFinished {
+    // (optional) true if the capsule request finished with a prompt.
+    // Used by the client to know whether to run the next QC request
+    // automatically, or pause.
+    bool isPrompt = 1;
+}
+
+message CapsulePivot {
+    repeated CapsuleSummary candidates = 1;
+}
+
+message XVivHost {
+    string value = 1;
+}
+
+message CapsuleSummary {
+    // capsule id
+    string id = 1;
+
+    // capsule id with version, eg uber.rideShare:0.1.1
+    string qualifiedId = 2;
+
+    // Name of the capsule
+    string displayName = 3;
+
+    // (optional) Capsule icon URL, intended to be a small, round image
+    string iconUrl = 4;
+
+    // if the user has marked the capsule as a favorite
+    bool favorite = 5;
+
+    // capsule version
+    string version = 6;
+
+    // (optional) larger, rectangular image for the capsule
+    string imageUrl = 7;
+}
+
+message BeginExecution {}
+
+message EndExecution {
+    // (optional) set to true if execution finished because of ASR failure
+    bool asrFailure = 1;
+}
+
+message SpsPaymentPrompt {
+    // This value is true when the capsule developer has set a test endpoint
+    // in the capsule definition. In the future, platform will block publishing
+    // of a capsule if the capsule has a test endpoint defined. This is mainly
+    // for IDE use only.
+    bool testPayment = 1;
+
+    string transactionId = 2;
+
+    // transaction amount
+    double amount = 3;
+
+    // ISO 4217 currency symbol (ex: USD, KRW)
+    string currency = 4;
+
+    // (optional) The merchant name...
+    string merchantName = 5;
+
+    // (optional) The merchant id...
+    string merchantId = 6;
+
+    // List of items in this order. Fields in the Item message are all required.
+    repeated Item items = 7;
+    message Item {
+        double amount = 1;
+        uint32 quantity = 2;
+        string description = 3;
+
+        // line item type
+        enum ItemType {
+            PRODUCT = 0;
+            TAX = 1;
+            SHIPPING = 2;
+        }
+
+        ItemType type = 4;
+
+    }
+}
+
+message RendererEvent {
+    // The type of renderer event
+    string type = 1;
+
+    // JSON-encoded renderer event (can be sent as-is to renderer)
+    string json = 2;
+
+    // Indicates whether this event is in "capsule context". By default, all renderer events
+    // are in capsule context, so this flag should almost always be true. However, in the case
+    // of a system permission, for example, since that event is not triggered by a specific
+    // capsule (it is triggered by BOS, that is the difference between service permissions
+    // and system permissions), it is set to false. In that case, the client should hide the
+    // capsule icon while it renders the content of this event. See API-1681 / VIV-32043.
+    bool capsuleContext = 3;
+}
+
+message SpeechString {
+    // Text to display on screen
+    string display = 1;
+    // Text used by TTS
+    string speech = 2;
+    // (optional) TTS Stream id (returned in TtsResponse events)
+    int32 ttsId = 3;
+}
+
+// Show some dialog on the screen
+message Message {
+    // Text to show
+    SpeechString text = 1;
+    // This message should go away when new ones come
+    bool temporary = 2;
+    // The context the message falls under
+    string dialogMode = 3;
+    // (optional) The full stringified-JSON contents of the message
+    string json = 4;
+}
+
+// Start a new page from an async request
+message NewPage {}
+
+// Delete a page from the history stack
+message DeletePage {
+    uint64 requestId = 1;
+
+    // For IDE use only
+    string requestIdStr = 2;
+}
+
+message ExecutionDecisions {
+    repeated Decision decisions = 1;
+    message Decision {
+        string id = 1;
+        SpeechString type = 2;
+        SpeechString value = 3;
+    }
+}
+
+message CapsuleInfo {
+    // Identifier of capsule
+    string id = 1;
+    // Display name of capsule
+    string displayName = 2;
+    // URL to capsule icon
+    string iconUrl = 3;
+    string androidAppId = 4;
+}
+
+message NlHighlighting {
+    repeated Segment segments = 1;
+    message Segment {
+        string text = 1;
+        bool highlight = 2;
+    }
+}
+
+message NoInterpretation {
+    // the user utterance interpreted by NLU
+    string utterance = 1;
+
+    // relevance-ranked list of capsules
+    repeated CapsuleSummary rankedCapsules = 2;
+
+    // remaining capsules available to user, with the ranked capsules removed,
+    // in a static, relevance-agnostic order
+    repeated CapsuleSummary otherCapsules = 3;
+}
+
+message NoResults {}
+
+message Action {
+    Style style = 1;
+    // (optional) Label for action button (TODO: not provided on retry buttons?)
+    SpeechString label = 2;
+    // (optional)
+    SpeechString sublabel = 3;
+    // (optional) URL to icon to display on action button
+    string iconUrl = 4;
+    // (optional) Disable this button by default (can be updated by Renderer)
+    bool disabled = 5;
+    // (optional)Identifier to send to Renderer
+    string rendererId = 6;
+    // (optional) Request to make if the user taps this action
+    VivRequest.IntentRequest request = 7;
+    // (optional) Button background color in css-style HEX RRGGBB string, e.g. "#123456"
+    string backgroundColor = 8;
+    // (optional) Button text color in css-style HEX RRGGBB string, e.g. "#123456"
+    string textColor = 9;
+
+    enum Style {
+        DEFAULT = 0;
+        TRANSACTION = 1;
+        CART = 2;
+        CONVERSATION_DRIVER = 3;
+    }
+}
+
+message Actions {
+    // (optional) List of actions
+    repeated Action actions = 1;
+    // (optional) Show an expiration timer on these actions
+    Expiration expiration = 2;
+
+    message Expiration {
+        // (optional) Message to show if the timer runs out
+        SpeechString message = 1;
+        // (required) Actual time these actions expire at
+        uint64 expirationEpochMs = 2;
+        // (optional) Action to run if the user taps a retry button
+        Action retryAction = 3;
+    }
+}
+
+message AuthorizationPrompt {
+    string url = 1;
+    string providerName = 2;
+    string providerId = 3;
+    string loginButtonLabel = 4;
+}
+
+message ClientFunctionCall {
+    string serviceCallId = 1;
+    string actionId = 2;
+    string argumentsJson = 3;
+}
+
+message RefreshIntent {
+    double delaySeconds = 1;
+    string sixtree = 2;
+}
+
+// The MdeLinked event is sent after a MDE conversation has been successfully established with both devices.
+message MdeLinked {
+    // Asset url of the icon representing the listener device
+    string listenerIconUrl = 1;
+
+    // Asset url of the icon representing the executor device
+    string executorIconUrl = 2;
+
+    oneof type {
+        MdeListener listener = 3;
+        MdeExecutor executor = 4;
+    }
+
+    message MdeListener {
+        // Guidance text to be presented to user on listener device
+        string guidanceText = 1;
+
+        // Label of the unlink button on the listener device
+        string unlinkButtonLabel = 2;
+
+        message OtherDevice {
+            string id = 1;
+            string name = 2;
+            string type = 3;
+            string room = 4;
+            string location = 5;
+        }
+
+        // Relevant information about the other device participating in the mde conversation
+        OtherDevice otherDevice = 3;
+    }
+
+    message MdeExecutor {
+        string otherDeviceId = 1;
+    }
+}
+
+// Prompts the client to repeat the last request with a new conversationId
+message StartNewConversation {}
+
+// Prompts the client to initiate the payment flow for an In-Capsule Purchase (ICP)
+// Somewhat similar to SpsPaymentPrompt...
+message IcpPaymentPrompt {
+    // SKU (Stock Keeping Unit) that uniquely identifies the product being
+    // purchased. The client can use this to obtain more information about
+    // the product, including the price in the user's market, from the ICP
+    // API service (possibly proxied through MSF)
+    string sku = 1;
+    // The id of the capsule requesting the payment (e.g., viv.twc)
+    string capsuleId = 2;
+    // Name of the product being purchased (e.g., "10-pack of premium jokes")
+    string title = 3;
+    // (optional) Description of the product being purchased, if supplied by the capsule developer.
+    string description = 4;
+    // (optional) URL of icon for the product being purchased, if supplied by the capsule developer.
+    string iconUrl = 5;
+}
+
+// Specify the display type of Bixby app the client should use in Driving Mode. See the
+// documentation of VivResponse.DrivingModeDisplay in the above for details.
+message DrivingModeDisplay {
+    enum DisplayValue {
+        Hidden = 0;
+        Compact = 1;
+        Full = 2;
+    }
+
+    DisplayValue value = 1;
+}
+
+// Specify the position and size of HEF focus to be displayed in the result list. See the
+// documentation of VivResponse.HefFocus in the above for details.
+message HefFocus {
+    // The zero-based index of the first focused result in a result list. Note that the result list
+    // may contain smartpicks, which are displayed above other regular items. Let's consider a list
+    // with 3 smartpicks and 5 regular results. In case the focus starts from the first smartpick,
+    // focusStart value will be 0. In case the focus starts from the second regular item, focusStart
+    // value will be 4.
+    uint32 focusStart = 1;
+
+    // The number of focused results in the result list. Note that the value of focusSize in this
+    // message may be different from focusSize passed in HefContext because BOS may adjust focusSize
+    // as needed. For instance, when focusSize in HefContext was 3, BOS may send a HefFocus message
+    // with focusSize 4 if four results are remaining for "next" list navigation, in order to avoid
+    // leaving just one item.
+    uint32 focusSize = 2;
+
+    // Indicates that Renderer should reuse the current page, which should be a page displaying a
+    // result list, and update its HEF focus state with new focusStart and focusSize.
+    bool reusePage = 3;
+
+    // (optional) Full stringified-JSON contents of HefFocus event, includes all dialog fragments
+    string json = 4;
+
+    // (optional) Indicates that the Renderer should display ordinal numbers to make it easy to
+    // make voice selection by saying a number. See VUI-4123 for details.
+    bool displayOrdinals = 5;
+}
+
+message PerformanceAnalysis {
+    // JSON payload containing the performance results.
+    string value = 1;
+}
+
+// See VAPI-1842.
+message ConversationTimeout {
+    uint32 timeoutSec = 1;
+}
+
+// See VAPI-1839. More specifically, read through the comment thread in that ticket!
+// Also see VBOS-7763 and https://github.com/six5/Six5/pull/12730
+message VoiceSelectionVocab {
+    repeated VoiceSelectionItem items = 1;
+
+    message VoiceSelectionItem {
+        string category = 1;
+        string content = 2;
+    }
+}
+
+// See VAPI-1981. Used by BRS and any client that requests these extra events for analysis.
+message CapsuleRequestReceived {
+    string requestId = 1;
+    string revision = 2;
+}
+
+// See VAPI-1981. Used by BRS and any client that requests these extra events for analysis.
+message Interpretation {
+    string intent = 1;
+}
+
+// See VAPI-1981. Used by BRS and any client that requests these extra events for analysis.
+message CategoryParticipantResolution {
+    string category = 1;
+}
+
+// See VAPI-2043. Used by BOS to notify the component selection state change to Renderer.
+message ComponentSelectionState {
+    bool selected = 1;
+    string resultId = 2;
+}
+
+// See VAPI-2100. Send interpretation information to end-user clients for analysis.
+//
+// Note on Interpretation vs. EndUserInterpretation: EndUserInterpretation, introduced for utterance
+// analysis on end-user clients, is sent to all clients by default. Interpretation, introduced for
+// performance analysis and regression test (before we introduce EndUserInterpretation hence the
+// shorter name), is sent only when client sets `performanceAnalysisEnabled` client feature flag.
+// Interpretation currently has only intent field, but may evolve to include additional fields
+// specific to performance analysis or regression test because the raw InterpretationEvent from BOS
+// has quite a few other props than intent, such as numInterpretations, intentMs, namedDispatch,
+// modalContext, etc. On the other hand, the raw EndUserInterpretation from BOS has a minimal
+// amount of information (just intent for now) needed for utterance analysis on end-user clients.
+message EndUserInterpretation {
+    string intent = 1;
+}
+
+enum VoiceMatchScope {
+    // A placeholder enum to allow Client to tell Unlock.voiceMatchScope is specified by BOS or not
+    Unknown = 0;
+    // Voice match scope for messages, email, calendar events, contacts, reminders, and call logs
+    PersonalData = 1;
+    // Voice match scope for smart home control
+    SmartHomeControl = 2;
+}
+
+// See comment in VivResponse for more information regarding the SmartCapsulePicker message.
+message SmartCapsulePicker {
+    // The intent to execute upon tapping on the "snack bar"
+    string intent = 1;
+    // The localized display name for the category, e.g., "Music" / "Musique" / "Música"
+    string category = 2;
+}
+
+// See comment in VivResponse for more information regarding the NotSelectedAsMdwExecutor message.
+message NotSelectedAsMdwExecutor {
+    // If message is empty, client should silently close Bixby
+    // If message is some string (e.g. "Check the TV"), client should display a message
+    string message = 1;
+}
+
+message LlmDebug {
+    // Current messageTypes are:
+    // 1. REQUEST_FROM_LLM
+    // 2. RESPONSE_TO_LLM
+    string messageType = 1;
+    string payload = 2;
+}

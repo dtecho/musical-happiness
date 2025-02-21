@@ -1,0 +1,570 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.asr2";
+
+package viv;
+
+import "codec.proto";
+import "shared.proto";
+
+/*
+# How to use ASR2
+
+## Send Metadata Headers:
+
+- Bixby-Service-Id
+- Viv-Device-Id
+- Authorization
+- Viv-Device-Type
+
+## After connection established:
+
+- Send `Asr2Request.InitEvent`
+  * It is recommend you specify a `conversationId` / `requestId`, as this is used for troubleshooting
+    ASR issues
+
+## ASR Flows
+
+Note: in ASR2, it might be possible to receive events after audio transcription is completed.
+`Asr2Response.AsrFinished` will always be sent as the last event in ASR2 in any flow to indicate
+that ASR is fully done.
+
+### Speech to text flow (`Init.type.SpeechToText`)
+
+- Start sending audio with `Asr2Request.AudioDataEvent`
+- If the client has the ability to supply VocabData used to improve ASR transcription, send the
+  vocabulary data with `Asr2Request.VocabDataEvent`
+- You will get back responses as Asr2Response.TranscriptionResult
+  * Use `Asr2Response.TranscriptionResult.formattedTranscription` for transcription data
+- Audio transcription is complete when `Asr2Response.TranscriptionResult.transcriptionCompleted = true`
+
+#### If `SpeechToText.triggerVoiceRecognition` is true
+
+If the user (defined by the Authorization header) has enrolled their voice using the
+`Voice Enrollment flow` (described in the next section), ASR will attempt to match the
+incoming AudioDataEvent data against the utterance fingerprints assigned to the user.
+
+If ASR could not match the audio data to the user:
+
+- `Asr2Response.type.VoiceRecognitionInvalid` will be sent
+
+#### If in a multi-user scenario
+
+- Look at the comments for `SpeechToText.deviceOwnerOauthToken`
+
+### Voice enrollment flow (`Init.type.VoiceEnrollment.newEnrollment`)
+
+#### Enroll utterances
+
+- Start sending enrollment audio with `Asr2Request.AudioDataEvent`
+- The result will be returned as `Asr2Response.VoiceEnrollmentResult.validUtterance`
+
+In most cases, multiple voice utterances might be enrolled for a single account, in which you would
+call newEnrollment again and follow the same steps.
+
+#### Enroll final utterance
+
+For the final utterance to register, call:
+
+- `Init.type.VoiceEnrollment.enrollmentResult`
+- Send audio
+- You'll get the result in `Asr2Response.VoiceEnrollmentResult.enrollmentFinished`
+
+#### Reset the enrolled utterances
+
+- `Init.type.VoiceEnrollment.resetEnrollment`
+- Should get back `Asr2Response.VoiceModelDeletedResult`
+*/
+
+message Asr2Request {
+    oneof type {
+        // Must be called first
+        // Initializes the ASR session
+        Init InitEvent = 1;
+
+        // Audio data to send to ASR
+        AudioData AudioDataEvent = 2;
+
+        // Vocabulary data to send to ASR
+        VocabData VocabDataEvent = 4;
+
+        // Abort the ASR session
+        AbortSession AbortSessionEvent = 3;
+    }
+
+    message Init {
+        // (optional) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+        // currently used for log tracking
+        string conversationId = 1;
+
+        // (optional) Client-generated requestId. Should be unique.
+        // Format is Unix Epoch Timestamp in Milliseconds
+        uint64 requestId = 2;
+
+        // (required) Language
+        string language = 3;
+
+        // (required) rampcode - acoustic model to apply for ASR (mobile|tv|speaker)
+        string rampcode = 4;
+
+        // (optional, with exceptions) acoustic model that applies to a specific device in conjunction with the
+        // rampcode, which accounts for the # of microphones / mic type / noise suppression a device has.
+        // required when using VoiceEnrollment or SpeechToText.triggerVoiceRecognition = true
+        string deviceProfile = 5;
+
+        // If true, the ASR server will not save the audio to its storage system
+        // This is to be deprecated. Use enableSavingAudio instead.
+        bool disableSavingAudio = 6 [deprecated=true];
+
+        /*(required) If it is set to true, ASR will save audio at storage. */
+        bool enableSavingAudio = 7;
+
+        enum AsrMode {
+            // This is to support older clients.
+            UNSPECIFIED = 0;
+
+            // Normal behavior. Only ASR service runs ASR engine.
+            SERVER = 1;
+
+            // The client runs on-device ASR engine first.
+            // ASR service runs server ASR engine only if the on-device result is rejected.
+            ON_DEVICE = 2;
+        }
+
+        // (optional) Indicates whether or not on-device ASR is enabled for this request.
+        AsrMode asrMode = 8;
+
+        oneof type {
+            // When you want to perform speech to text functionality
+            SpeechToText SpeechToText = 20;
+
+            // When you want to perform voice enrollment
+            VoiceEnrollment VoiceEnrollment = 21;
+        }
+    }
+
+    message AudioParams {
+        // (required) Audio encoding
+        AudioCodec codec = 1;
+
+        // (required) Audio sample rate
+        int32 sampleRateHertz = 2;
+    }
+
+    message AudioData {
+        // Send this with raw audio data
+        bytes audioData = 1;
+
+        // End of stream
+        bool end = 2;
+
+        // (optional) Transcribed text by the on-device ASR.
+        string onDeviceHypothesis = 3;
+
+        enum OnDeviceStatus {
+            // This is to force client not to use the default value in ON_DEVICE mode.
+            UNSPECIFIED = 0;
+
+            // On-device ASR result is accepted at the device side.
+            // Server side processing will not proceed further.
+            ACCEPTED = 1;
+
+            // On-device ASR result is rejected at the device side.
+            // Final ASR result will be sent from the server.
+            REJECTED = 2;
+        }
+
+        // (optional) Non-default value is required in ON_DEVICE mode.
+        OnDeviceStatus onDeviceStatus = 4;
+
+        // (optional) Indicates whether the audio data contains verbal Bixby Listening Sound (BLS) or not
+        bool hasVerbalBls = 5;
+    }
+
+    message VocabData {
+        // Vocabulary items
+        repeated VocabItem vocabItems = 1;
+
+        message VocabItem {
+            // (required) category of the vocab item
+            string category = 1;
+
+            // (required) written form of the vocab item (e.g. '101'). ITN stands for Inverse Text
+            // Normalization.
+            string itn = 2;
+
+            // (optional) spoken forms of the vocab item (e.g. ['one hundred one', 'a hundred one',
+            // 'one oh one']). TN stands for Text Normalization.
+            repeated string tn = 3;
+        }
+    }
+
+    message SpeechToText {
+        AudioParams audioParams = 1;
+
+        // (optional) Parameters which will be sent when Bixby wakes via voice wakeup.
+        Wakeup wakeup = 2;
+
+        // (optional) enables voice recognition for the purpose of
+        // identifying the user behind the voice
+        bool triggerVoiceRecognition = 3;
+
+        // (optional) Geo position
+        // note: this value is ignored in VivStream, use VivStream.Metadata.geo instead
+        GeoPosition geo = 4;
+
+        message Wakeup {
+            /* This param indicates whether wakeup module sends audio
+             * including wakeup word or not
+             */
+            bool isWakeupWord = 1;
+
+            /* The text defined for WakeupWord, such as "Hi Bixby"
+             * only applies if isWakeupWord is true
+             */
+            string wakeupWordText = 2;
+
+            /* Acoustic Echo Cancellation
+             * If Bixby is awaken during device is playing music,
+             * wakeup module turns on Acoustic Echo Cancellation.
+             * ASR server needs to know whether AEC is turned on or off
+             * for processing utterance more precisely
+             */
+            bool acousticEchoCancellationEnabled = 3;
+
+            // This is logged for later analysis/debugging. It is not used by CES
+            // or any downstream system. See VAPI-1204.
+            string wakeupServiceVersion = 4;
+
+            /* Indicate whether Verbal BLS (Bixby Listening Sound) feature is enabled on the client or not.
+            * When Verbal BLS is NOT enabled, the client plays a non-verbal 'beep' sound on wakeup to
+            * communicate that it is listening. When Verbal BLS is enabled (note: seamless wakeup is always
+            * enabled with verbalBlsEnabled), the client starts listening without play a 'beep' sound.
+            * Then, if the client doesn't hear anything for a few seconds, it plays a TTS message (e.g.
+            * 'I am listening. Please say a command.'), a verbalized listening sound, to notify the user
+            * that it is actually listening and waiting for user's input. ASR service uses this flag to
+            * properly ignore the Verbal BLS in audio recording.
+            */
+            bool verbalBlsEnabled = 5;
+
+            /* The signal strength of the wakeup word measured by the client */
+            double signalStrength = 6;
+        
+            /* Indicate whether BLS (Bixby Listening Sound) feature is enabled on the client or not.
+            * When BLS is not enabled, the client does not play any sound even though the user says nothing for a few seconds.
+            */
+            bool blsEnabled = 7;
+
+            /*
+            * Indicates whether the on-device ASR is in use or not. If this field is true, MDW Manager should
+            * not do server-side ASR against `voiceData.audioBuffer` because client must be sending an empty
+            * audio buffer, and client sends ASR text from on-device ASR via `voiceData.onDeviceHypothesis`.
+            * Yet, MDE Manager still needs to keep the connection with CES so it can listen to whether client
+            * accepted or rejected the user utternace and also to be able to return BOS response in reject
+            * case (VAPI-2487).
+            */
+            bool isOnDeviceAsr = 8;
+        }
+
+        // (optional) The oauth token for the device owner
+        // Only applies to the VivStream endpoint (NOT the Asr2Stream endpoint)
+        //
+        // this is used for a multi-user scenario like a speaker system that has a core owner
+        // and other registered users on it
+        //
+        // In the multi-user scenario, two account tokens are sent:
+        // - the assumed user, which the auth token is sent via the grpc metadata headers
+        // - deviceOwnerOauthToken, which is an auth token for the owner of the device
+        //
+        // During an ASR request with triggerVoiceRecognition = true, ASR will attempt to
+        // match the assumed user against the incoming voice data
+        //
+        // If the voice data does not match the assumed user, then ASR will send the
+        // VoiceRecognitionInvalid message to CES
+        //
+        // CES will then auth the deviceOwnerOauthToken and make a request to BOS using the NL
+        // returned from ASR with a guest flag set to true to execute only guest capsules under the
+        // deviceOwnerOauthToken account
+        //
+        // This value should be defined like the 'Authorization' header
+        //
+        // example value:
+        // Bearer test:owner-token
+        string deviceOwnerOauthToken = 5;
+    }
+
+    /*
+     *  Enrolls user's voice to account
+     *
+     *  sentence 1 - newEnrollment, send audio, validUtterance
+     *  sentence 2 - newEnrollment, send audio, validUtterance
+     *  sentence 3 - newEnrollment, send audio, validUtterance
+     *  ...
+     *  Last sentence - enrollmentResult, send, send audio, enrollmentFinished
+     */
+    message VoiceEnrollment {
+        oneof enrollmentMethod {
+            // Use this method to register a new voice association with text
+            // The result will be returned as Asr2Response.VoiceEnrollmentResult.validUtterance
+            Enrollment newEnrollment = 1;
+
+            // Use this method for the last voice to be associated with text.
+            // The result will be returned as Asr2Response.VoiceEnrollmentResult.enrollmentFinished
+            Enrollment enrollmentResult = 2;
+
+            // Resets the associated voice / text model for the user, allowing
+            // the user to go through the process again
+            ResetEnrollment resetEnrollment = 3;
+        }
+
+        message Enrollment {
+            AudioParams audioParams = 1;
+
+            /*
+             * Device will send predefined text which will be used for
+             * validation against ASR engine output
+             * it is required when device sends EnrollmentType as 1 or 2.
+             */
+            string enrollmentSampleText = 2;
+        }
+
+        message ResetEnrollment {}
+    }
+
+    message AbortSession {
+        string reason = 1;
+    }
+}
+
+message Asr2Response {
+    oneof type {
+        // AsrReady will be deprecated as it serves no purpose. It is still sent to the client,
+        // but the client should just ignore it.
+        AsrReady AsrReady = 1;
+
+        // Transcribed audio
+        TranscriptionResult TranscriptionResult = 2;
+
+        // If triggerVoiceRecognition is enabled
+        // This is sent if the voice could not be validated
+        VoiceRecognitionInvalid VoiceRecognitionInvalid = 3;
+
+        // Voice enrollment results
+        VoiceEnrollmentResult VoiceEnrollmentResult = 4;
+
+        /* This is optional parameter.
+         *
+         * Parameter Description :
+         *      This parameter is to send the reset result to CES from ASR Service.
+         *      when user requests reset with `enrollmentType = 3` (RESET),
+         *      this parameter will be set with result.
+         *
+         */
+        VoiceModelDeletedResult VoiceModelDeletedResult = 5;
+
+        // The client should not expect any more events to be sent from ASR
+        AsrFinished AsrFinished = 6;
+
+        // Used to communicate a list of signal ranks provided by MDW Manager. Client uses the list
+        // to determine whether the device should play a beep sound or not; the beep sound is used
+        // to confirm the beginning of ASR to user. This message may be sent to the Client multiple
+        // times while ASR is in progress because MDW Manager may get data from additional devices
+        // after sending one. Still the order of items in the list should never change -- a new item
+        // is appended at the end.
+        SignalRankResult SignalRankResult = 7;
+
+        // Used to control whether the client should enable the visual feedback, such as listening
+        // animation and transcription display, or not.
+        VisualFeedbackControl VisualFeedbackControl = 8;
+    }
+}
+
+message AsrFinished {}
+
+message AsrReady {
+    // Version of the CES that the client is connected to
+    string cesVersion = 1;
+
+    // Version of the protobuf definitions CES is using
+    // See releases here:
+    // https://github.com/six5/capsule-exec-protobuf/releases
+    string protoDefsVersion = 2;
+
+    // id generated by CES for this specific request, used for troubleshooting purposes
+    // when making a bug report, please use this value
+    string cesReqId = 3;
+}
+
+message VoiceRecognitionInvalid {
+    // the account id that we were trying to do voice validation against
+    string accountId = 1;
+}
+
+message TranscriptionResult {
+    // Recognized speech
+    string text = 1 [deprecated=true];
+
+    // A tokenized version of the text
+    // eg 打开电话录音设置界面 -> 打开 电话 录音 设置 界面
+    string tokenizedText = 2 [deprecated=true];
+
+    // Timing information sent for word highlight animation
+    // eg "3_to_58 65_to_100 101_to_111 112_to_135 136_to_175 200_to_219”
+    string textAnimationTimings = 3 [deprecated=true];
+
+    /* true if device woke up without wakeup command, unintentional woke up
+     * Let's say user has set wakeup word as "Hi Bixby"
+     * Unintentionally user is uttering "Hi Bigb", in this case device shouldn't wakeup
+     * Device will send audio data with wakeup paramter to server
+     * ASR Server side compares the predefined wakeup command and user utterance to decide falseWakeup
+     */
+    bool invalidWakeup = 4;
+
+    // Additional transcription data
+    FormattedTranscription formattedTranscription = 5;
+
+    message FormattedTranscription {
+        message Transcription {
+            // User utterance string. Can be final or intermediate
+            string text = 1;
+
+            // Audio timing information sent to client for debug purpose
+            // eg "3_to_58 65_to_100 101_to_111 112_to_135 136_to_175 200_to_219”
+            string timingInfo = 2;
+
+            // A tokenized version of the text
+            // eg 打开电话录音设置界面 -> 打开 电话 录音 设置 界面
+            string tokenizedText = 3;
+
+            // engine raw output text with no post-processing applied
+            // e.g. engineText = 오천오백오십 vs. text = 5550
+            string engineText = 4;
+        }
+
+        // Marked-up version of the utterance
+        // This is used in conjunction with the timingInfo data
+        // where audio data could initially contain moments of silence
+        // before the utterance begins
+        // the "s" tag is the start/end of the utterance
+        // text = " <s>one two three four</s>"
+        Transcription utteranceMarked = 1;
+
+        // utterance used for nl execution
+        Transcription forNlExecution = 2;
+
+        // utterance used for display by the client
+        Transcription forClientDisplay = 3;
+    }
+
+    // ASR has finished the transcription
+    // This event represents the final result
+    // This does not mean the ASR request is finished,
+    // only that ASR is done with transcription
+    // continue to wait for AsrFinished to mark the end
+    // of communication with ASR
+    bool transcriptionCompleted = 6;
+
+    // If true, then ASR failed because of too much background noise for it to be able to interpret audio
+    bool isNoisy = 7;
+
+    // MDW Manager sets this field true to indicate that it returned empty ASR hypothesis because an
+    // on-device client accepted user's utterance. Returning an empty ASR hypothesis with
+    // emptyTextSetByOnDeviceAccept true makes CES send ASR_EMPTY_TEXT_SET_BY_ON_DEVICE_ACCEPT error to the
+    // client, which causes the client silently to close Bixby UI.
+    bool emptyTextSetByOnDeviceAccept = 8;
+
+    // MDW Manager sets this field true to indicate that the final ASR text matched a quick command
+    // on one of the participating devices. CES uses the field to determine whether to submit the NL
+    // to BOS or not. If quickCommandMatched is true, even if the final hypothesis is a non-empty
+    // text (=quick command), CES will not submit the NL to BOS. If quickCommandMatched is true and
+    // the final hypothesis is empty, CES will return ASR_TRANSCRIBED_AS_EMPTY_TEXT error to client
+    // to silence the device.
+    bool quickCommandMatched = 9;
+}
+
+message VoiceEnrollmentResult {
+    // (optional)
+    AsrResultStatus AsrResultStatus = 1;
+
+    oneof type {
+        /*
+         * This is returned after using newEnrollment
+         * true : go to next sentence, false try again same sentence
+         */
+        ValidUtterance validUtterance = 10;
+
+        /*
+         * This is returned after using enrollmentResult. It is the result of the final phrase to
+         * recognize.
+         * success : enrollment finished, voice unlock feature can be used
+         * fail : voice enrollment failed, try again
+         */
+        EnrollmentFinished enrollmentFinished = 11;
+    }
+
+    message ValidUtterance {
+        bool isValid = 1;
+    }
+
+    message EnrollmentFinished {
+        bool isFinished = 1;
+    }
+}
+
+message VoiceModelDeletedResult {
+    // (optional)
+    AsrResultStatus AsrResultStatus = 1;
+
+    /* This is mandatory parameter.
+     *
+     * Parameter Description :
+     *      if this parameter set to true, it means speaker model is deleted successfully.
+     *      if this parameter set to false, it means speaker model is not deleted successfully.
+     *
+     */
+    bool deleted = 2;
+}
+
+// This is optional for some messages
+message AsrResultStatus {
+    /* This is mandatory parameter.
+     *
+     * Parameter Description :
+     *      2xx: success response.
+     *      4xx: there is some issue with client's request side.
+     *      5xx: there is some issue with server side.
+     *
+     */
+
+    int32 statusCode = 1;
+
+    /* This is optional parameter.
+     *
+     * Parameter Description :
+     *      this is parameter for more details of response status.
+     *
+     */
+
+    string statusMsg = 2;
+}
+
+message SignalRankResult {
+    message RankItem {
+        // The signal rank of the device
+        int32 rank = 1;
+        // The svcId (the unique device ID)
+        string svcId = 2;
+        // The signal arrival timestamp in Unix epoch millisecond format
+        int64 timestamp = 3;
+        // Indicates whether the device is using on-device ASR or not
+        bool isOnDevice = 4;
+    }
+
+    // A list of signal rank items
+    repeated RankItem rankItems = 1;
+}
+
+message VisualFeedbackControl {
+    bool visualFeedbackEnabled = 1;
+}

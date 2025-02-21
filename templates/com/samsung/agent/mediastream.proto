@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option java_package = "com.samsung.phoebus.audio";
+option java_outer_classname = "MediaStreamProto";
+
+package mediastream;
+
+
+message MediaInfo {
+    string  contentType = 1;
+    int64   contentLength = 2;
+    string  metrics = 3;
+}
+
+message MediaChunk {
+    bytes   mediaBuffer = 1;
+}
+
+message MediaResponse {
+    oneof MediaResponseType {
+        MediaInfo mediaInfo = 1;
+        MediaChunk mediaChunk = 2;
+    }
+}
+
+//for pTts
+message PttsMediaInfo{
+    string  contentType = 1;
+    int64   contentLength = 2;
+    string  metrics = 3;
+    string  text = 4;
+    int64   subId = 5;
+    bool    isText = 6;
+}
+
+message PttsMediaChunk{
+    bytes mediaBuffer = 1;
+    int64 subId = 2;
+}
+
+message PttsEnd{
+    bool end = 1;
+    int64 subId = 2;
+}
+
+message PttsMediaResponse{
+    oneof PttsMediaResponseType{
+        PttsMediaInfo pttsMediaInfo = 1;
+        PttsMediaChunk pttsMediaChunk = 2;
+        PttsEnd pttsEnd = 3;
+    }
+}

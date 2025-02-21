@@ -1,0 +1,52 @@
+שלום, עולם!
+
+Hello, world!
+
+The next paragraph starts with U+200F RIGHT-TO-LEFT MARK
+
+‏Hello, world!
+
+The next paragraph starts with U+200E LEFT-TO-RIGHT MARK
+
+‎שלום, עולם!
+
+#+FOO: שלום, עולם!
+
+#+begin_example
+  שלום, עולם!
+#+end_example
+
+| Hello, world! | שלום, עולם!   |
+| שלום, עולם!   | Hello, world! |
+
+| שלום, עולם!   | Hello, world! |
+| Hello, world! | שלום, עולם!   |
+
+- Hello, world!
+- שלום, עולם!
+
+
+- שלום, עולם!
+- Hello, world!
+
+* שלום, עולם!                                                    :hello:שלום:
+  :PROPERTIES:
+  :CUSTOM_ID: שלום, עולם!
+  :END:
+
+  שלום, עולם!
+
+  Hello, world!
+
+* Hello, world!                                                  :hello:שלום:
+  :PROPERTIES:
+  :CUSTOM_ID: Hello, world!
+  :END:
+
+  שלום, עולם!
+
+  Hello, world!
+
+# Local Variables:
+# bidi-paragraph-direction: right-to-left
+# End:

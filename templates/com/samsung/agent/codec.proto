@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.codec";
+
+package viv;
+
+enum AudioCodec {
+    UNSPECIFIED = 0;
+
+    // Uncompressed 16-bit signed little-endian samples (Linear PCM)
+    LINEAR16 = 1;
+
+    OGG_OPUS = 2;
+
+    FLAC = 3;
+
+    SPEEX = 4;
+
+    // No Ogg/Opus header, encoded with chunk length: [16bit uint BE] [data]
+    SAMSUNG_OPUS = 5;
+
+    WAV = 6;
+
+    // Used only by Samsung's TTS SSML (i.e. not used by ASR or other systems!)
+    // When the client specifies this codec in the TTS params, TTS will return
+    // structured data serialized using protocol buffers, instead of a standard
+    // audio stream. This is especially helpful to interleave audio buffers
+    // encoded with different codec (e.g., opus and mp3) See VAPI-1307.
+    SAMSUNG_MULTI = 7;
+
+    // Similar to SAMUNG_MULTI, but instead of using OPUS audio buffers,this uses
+    // LINEAR16/PCM audio buffers. Used by Bixby Studio to avoid decoding OPUS audio buffers.
+    // VAPI-2055
+    SAMSUNG_MULTI_LINEAR16 = 8;
+
+    // Used for pTTS (personal TTS)
+    // Like SAMSUNG_MULTI, TTS returns structured data serialized using protocol buffer,
+    // instead of a standard audio stream. The TTS also includes multiple metadata.
+    SAMSUNG_MULTI_PTTS = 9;
+
+    // Similar to SAMSUNG_MULTI_PTTS, but instead of using OPUS audio buffers,this uses
+    // LINEAR16/PCM audio buffers.
+    SAMSUNG_MULTI_PTTS_LINEAR16 = 10;
+}

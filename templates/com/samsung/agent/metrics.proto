@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.metrics";
+
+package viv;
+
+message MetricsRequest {
+    // (required) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+    string conversationId = 1;
+
+    // (required) Client-generated requestId. Should be unique.
+    // Use Unix Epoch Timestamp in Milliseconds
+    uint64 requestId = 2;
+
+    Metrics metrics = 3;
+
+    // (required) Client-generated requestId. Should be unique.
+    // The string version of request ids is used only by the IDE.
+    // However, since the IDE does not (and should not) send metrics request,
+    // this field was deprecated. Just don't use it...
+    string requestIdStr = 4 [deprecated = true];
+
+    message Metrics {
+        // (required) Unix-epoch time that the request started
+        uint64 requestStartTimeEpochMs = 1;
+
+        // (optional) Time to connect to the server for this request
+        TimeRange connection = 2;
+
+        // (optional) Time to initialize audio before listening
+        TimeRange audioInit = 3;
+        // (optional) Time to send audio data
+        TimeRange audioDataSend = 4;
+        // (optional) Time from first audio data sent to first partial back from ASR
+        TimeRange asrFirstAudioDataToFirstPartial = 5;
+        // (optional) Time from last audio data sent to final transcription
+        TimeRange asrLastAudioDataToFinal = 6;
+
+        // (optional) Time to get app context from native app
+        TimeRange appContext = 7;
+
+        // (optional) Time from finishing sending a request to first platform event
+        // - If ASR, this would be after last audio packet is sent (before response)
+        // - If regular request, after sending VivRequest.Metadata
+        // - If sending app context, also wait for that to get sent out (since it blocks server
+        //    processing)
+        TimeRange requestToFirstPlatformEvent = 8;
+
+        // (optional) Time from receiving a client function call to responding to it
+        repeated TimeRange clientFunctionCalls = 9;
+
+        // (optional) Time to initialize webview
+        TimeRange webviewInit = 10;
+        // (optional) Time to load Renderer in webview
+        TimeRange webviewLoad = 11;
+        // (optional) Time to send events to Renderer
+        TimeRange webviewSendEvents = 12;
+        // (optional) Time from last event sent to Renderer to receiving onReady callback
+        TimeRange webviewLastEventToOnReady = 13;
+
+        // (optional) Time to receive TTS stream (from TTS Metadata to done)
+        repeated TimeRange ttsReceive = 14;
+
+        // Represents a relative millisecond range
+        message TimeRange {
+            // (required) Number of milliseconds since requestStartTimeEpochMs
+            uint32 startTimeMs = 1;
+            // (optional) Number of milliseconds this range lasts
+            uint32 durationMs = 2;
+            // (optional) Indicates the range never finished (durationMs should be 0)
+            bool incomplete = 3;
+        }
+    }
+}
+
+message MetricsResponse {
+    bool ok = 1;
+}

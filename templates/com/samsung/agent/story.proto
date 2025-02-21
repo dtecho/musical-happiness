@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.story";
+
+package viv;
+
+// Ref: https://github.com/six5/Six5/pull/13294
+// Ref: https://docs.google.com/document/d/1mxTL0I74wSvRPMaheZSG-8wlSm3a_64VFgok4mw-PZE
+// After seeing the complexity of the data structure, which is similar to RendererEvent
+// it can be easier to deal with this structure as a string-type field containing JSON
+// This particular data structure is okay to be opaque to CES, just like RendererEvent
+message StoryRequest {
+    // (required) versioned capsuleId
+    string storyCapsule = 1;
+
+    // (optional) List of mocked configs and secrets that are to be used during the Story execution
+    string configAndSecretMocksJson = 2;
+
+    // (optional) List of OAuth data recording during story recording
+    string oAuthMocksJson = 3;
+
+    // (optional) mapping of mocked dynamic PDSS user data to be used for the dynamic user data Gazetteer
+    string pdssDataMocksJson = 4;
+
+    // (required) List of individual Story user requests that make up the Story and will be executed sequentially
+    string userRequestsJson = 5;
+}

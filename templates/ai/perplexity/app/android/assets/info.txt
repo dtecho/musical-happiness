@@ -1,0 +1,7 @@
+name: Singular-v12.6.0-7d8bc3c1.master
+env: release
+git_commit: 7d8bc3c1
+git_branch: master
+version_name: 12.6.0
+version_code:1
+build_date: Sun, 6 Oct 2024 17:35:02 +0300

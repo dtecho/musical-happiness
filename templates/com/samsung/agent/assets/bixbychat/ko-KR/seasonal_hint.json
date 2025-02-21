@@ -1,0 +1,9 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_enteratinment_koKR",
+    "goal": "GREETING_CAT2_Q4",
+    "utterance": "메리 크리스마스",
+    "dateTimeInterval.start": "2021-12-24T00:00:00",
+    "dateTimeInterval.end": "2021-12-25T23:59:59"
+  }
+]

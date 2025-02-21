@@ -1,0 +1,131 @@
+<html>
+   <head>
+      <meta
+         name="viewport"
+         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <style type="text/css">
+         @-webkit-keyframes backgroundPulse {
+         0% {
+         background-color: #eeeeee;
+         }
+         50% {
+         background-color: #e1e1e1;
+         }
+         100% {
+         background-color: #eeeeee;
+         }
+         }
+         @keyframes backgroundPulse {
+         0% {
+         background-color: #eeeeee;
+         }
+         50% {
+         background-color: #e1e1e1;
+         }
+         100% {
+         background-color: #eeeeee;
+         }
+         }
+         .Recaptcha__loader {
+         background: #f9f9f9;
+         border: 1px solid #d3d3d3;
+         border-radius: 2px;
+         box-shadow: 0 5px 10px 0 rgba(0,0,0,0.20);
+         height: 74px;
+         position: absolute;
+         width: 299px; /* -1px to look better on mobile */
+         }
+         .Recaptcha__loader-item {
+         -webkit-animation-delay: 0;
+         animation-delay: 0;
+         -webkit-animation-direction: normal;
+         animation-direction: normal;
+         -webkit-animation-duration: 1000ms;
+         animation-duration: 1000ms;
+         -webkit-animation-fill-mode: both;
+         animation-fill-mode: both;
+         -webkit-animation-iteration-count: infinite;
+         animation-iteration-count: infinite;
+         -webkit-animation-name: backgroundPulse;
+         animation-name: backgroundPulse;
+         background-color: #eeeeee;
+         border-radius: 2px;
+         }
+         .Recaptcha__loader-checkbox {
+         height: 28px;
+         left: 12px;
+         position: absolute;
+         top: 23px;
+         width: 28px;
+         }
+         .Recaptcha__loader-text {
+         height: 14px;
+         left: 50px;
+         position: absolute;
+         top: 29px;
+         width: 94px;
+         }
+         .Recaptcha__loader-logo {
+         border-radius: 50%;
+         height: 32px;
+         position: absolute;
+         right: 23px;
+         top: 10px;
+         width: 32px;
+         }
+         .Recaptcha__loader-logo-text {
+         height: 10px;
+         position: absolute;
+         right: 10px;
+         top: 47px;
+         width: 58px;
+         }
+         .Recaptcha__loader {
+         left: 0;
+         margin-left: auto;
+         margin-right: auto;
+         position: absolute;
+         right: 0;
+         bottom: 32px;
+         }
+         .Recaptcha__recaptcha-container {
+         left: 0;
+         margin-left: auto;
+         margin-right: auto;
+         position: absolute;
+         right: 0;
+         }
+         .Recaptcha__recaptcha-container div {
+         margin: auto;
+         }
+      </style>
+      <script type="text/javascript" id="recaptchaCallback">
+          function onRecaptchaComplete(message) {
+              RecaptchaJSListener.onRecaptchaComplete(message);
+          }
+      </script>
+      <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback"></script>
+   </head>
+   <body>
+      <div id="captcha" class="Recaptcha__loader"></div>
+      <div class="Recaptcha">
+         <div class="Recaptcha__loader">
+            <span class="Recaptcha__loader-item Recaptcha__loader-checkbox"></span>
+            <span class="Recaptcha__loader-item Recaptcha__loader-text"></span>
+            <span class="Recaptcha__loader-item Recaptcha__loader-logo"></span>
+            <span class="Recaptcha__loader-item Recaptcha__loader-logo-text"></span>
+         </div>
+      </div>
+   </body>
+   <script type="text/javascript">
+      function onloadCallback()
+      {
+          grecaptcha.render("captcha", {
+              "sitekey" : "<SITE_KEY>",
+              "callback" : function(response) {
+                  onRecaptchaComplete(response)
+              }
+          })
+      }
+   </script>
+</html>

@@ -1,0 +1,22 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_EN",
+    "goal": "ENTERTAIN_BEAT_Q1",
+    "utterance": "Drop a beat"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_EN",
+    "goal": "ENTERTAIN_SPE_Q2",
+    "utterance": "Quote of the day"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_EN",
+    "goal": "ENTERTAIN_SPE_Q5",
+    "utterance": "What's special about today?"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_EN",
+    "goal": "ENTERTAIN_JOKE_Q173",
+    "utterance": "Make a funny sound"
+  }
+]

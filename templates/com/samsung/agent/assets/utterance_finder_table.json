@@ -1,0 +1,705 @@
+{
+  "matchingInfo": [
+    {
+      "_id": 1,
+      "keyword_en_us": "Bixby",
+      "keyword_ko": "빅스비",
+      "keyword_zh": "Bixby",
+      "keyword_en": "Bixby",
+      "keyword_fr": "Bixby",
+      "keyword_de": "Bixby",
+      "keyword_it": "Bixby",
+      "keyword_es": "Bixby",
+      "keyword_pt": "Bixby",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 2,
+      "keyword_en_us": "Capsule",
+      "keyword_ko": "캡슐",
+      "keyword_zh": "胶囊",
+      "keyword_en": "Capsule",
+      "keyword_fr": "Capsule",
+      "keyword_de": "Kapsel",
+      "keyword_it": "Capsula",
+      "keyword_es": "Cápsula",
+      "keyword_pt": "Cápsula",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 3,
+      "keyword_en_us": "Bixby Voice BixbyVoice",
+      "keyword_ko": "빅스비 보이스 빅스비보이스",
+      "keyword_zh": "Bixby 语音 Bixby语音",
+      "keyword_en": "Bixby Voice BixbyVoice",
+      "keyword_fr": "Bixby Voice BixbyVoice",
+      "keyword_de": "Bixby Voice BixbyVoice",
+      "keyword_it": "Bixby Voice BixbyVoice",
+      "keyword_es": "Bixby Voice BixbyVoice",
+      "keyword_pt": "Bixby Voice BixbyVoice",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 4,
+      "keyword_en_us": "Assistant",
+      "keyword_ko": "어시스턴트",
+      "keyword_zh": "助手",
+      "keyword_en": "Assistant",
+      "keyword_fr": "Assistant",
+      "keyword_de": "Assistant",
+      "keyword_it": "Assistente",
+      "keyword_es": "Asistente",
+      "keyword_pt": "Assistente",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 5,
+      "keyword_en_us": "Voice",
+      "keyword_ko": "음성",
+      "keyword_zh": "语音",
+      "keyword_en": "Voice",
+      "keyword_fr": "Voix",
+      "keyword_de": "Stimme",
+      "keyword_it": "Voce",
+      "keyword_es": "Voz",
+      "keyword_pt": "Voz",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 6,
+      "keyword_en_us": "Intelligent",
+      "keyword_ko": "인텔리전트",
+      "keyword_zh": "智能",
+      "keyword_en": "Intelligent",
+      "keyword_fr": "Intelligent",
+      "keyword_de": "Intelligent",
+      "keyword_it": "Intelligente",
+      "keyword_es": "Inteligente",
+      "keyword_pt": "Inteligente",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 7,
+      "keyword_en_us": "Wifi",
+      "keyword_ko": "와이파이",
+      "keyword_zh": "Wi-Fi",
+      "keyword_en": "Wifi",
+      "keyword_fr": "Wi-Fi",
+      "keyword_de": "WLAN",
+      "keyword_it": "Wi-Fi",
+      "keyword_es": "Wi-Fi",
+      "keyword_pt": "Wi-Fi",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_wifi",
+        "sfinder_keyword_turn_off_wifi"
+      ]
+    },
+    {
+      "_id": 8,
+      "keyword_en_us": "Mobile Data MobileData",
+      "keyword_ko": "모바일 데이터 모바일데이터",
+      "keyword_zh": "移动数据",
+      "keyword_en": "Mobile Data MobileData",
+      "keyword_fr": "Données mobiles Donnéesmobiles",
+      "keyword_de": "Mobile Daten",
+      "keyword_it": "Connessione dati",
+      "keyword_es": "Datos móviles Datosmóviles",
+      "keyword_pt": "Datos móviles Datosmóviles",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_mobile_data",
+        "sfinder_keyword_turn_off_mobile_data"
+      ]
+    },
+    {
+      "_id": 9,
+      "keyword_en_us": "Bluetooth",
+      "keyword_ko": "블루투스",
+      "keyword_zh": "蓝牙",
+      "keyword_en": "Bluetooth",
+      "keyword_fr": "Bluetooth",
+      "keyword_de": "Bluetooth",
+      "keyword_it": "Bluetooth",
+      "keyword_es": "Bluetooth",
+      "keyword_pt": "Bluetooth",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_bluetooth",
+        "sfinder_keyword_turn_off_bluetooth"
+      ]
+    },
+    {
+      "_id": 10,
+      "keyword_en_us": "Font",
+      "keyword_ko": "글꼴",
+      "keyword_zh": "字体",
+      "keyword_en": "Font",
+      "keyword_fr": "Police",
+      "keyword_de": "Schriftart",
+      "keyword_it": "Carattere",
+      "keyword_es": "Fuente",
+      "keyword_pt": "Fuente",
+      "utteranceIds": [
+        "sfinder_keyword_increase_the_font_size",
+        "sfinder_keyword_reduce_the_font_size"
+      ]
+    },
+    {
+      "_id": 11,
+      "keyword_en_us": "Sound",
+      "keyword_ko": "소리",
+      "keyword_zh": "声音",
+      "keyword_en": "Sound",
+      "keyword_fr": "Son",
+      "keyword_de": "Ton",
+      "keyword_it": "Suono",
+      "keyword_es": "Sonido",
+      "keyword_pt": "Som",
+      "utteranceIds": [
+        "sfinder_keyword_increase_volume",
+        "sfinder_keyword_decrease_volume"
+      ]
+    },
+    {
+      "_id": 12,
+      "keyword_en_us": "Volume",
+      "keyword_ko": "음량",
+      "keyword_zh": "音量",
+      "keyword_en": "Volume",
+      "keyword_fr": "Volume",
+      "keyword_de": "Lautstärke",
+      "keyword_it": "Volume",
+      "keyword_es": "Volumen",
+      "keyword_pt": "Volumen",
+      "utteranceIds": [
+        "sfinder_keyword_increase_volume",
+        "sfinder_keyword_decrease_volume"
+      ]
+    },
+    {
+      "_id": 13,
+      "keyword_en_us": "Brightness",
+      "keyword_ko": "밝기",
+      "keyword_zh": "亮度",
+      "keyword_en": "Brightness",
+      "keyword_fr": "Luminosité",
+      "keyword_de": "Helligkeit",
+      "keyword_it": "Luminosità",
+      "keyword_es": "Brilho",
+      "keyword_pt": "Brilho",
+      "utteranceIds": [
+        "sfinder_keyword_the_screen_brighter",
+        "sfinder_keyword_the_screen_darker"
+      ]
+    },
+    {
+      "_id": 14,
+      "keyword_en_us": "do not disturb donotdisturb",
+      "keyword_ko": "방해 금지 방해금지",
+      "keyword_zh": "免打扰",
+      "keyword_en": "do not disturb donotdisturb",
+      "keyword_fr": "Ne pas déranger Nepasdéranger",
+      "keyword_de": "Nicht stören Nichtstören",
+      "keyword_it": "Non disturbare Nondisturbare",
+      "keyword_es": "Não perturbar Nãoperturbar",
+      "keyword_pt": "Não perturbar Nãoperturbar",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_do_not_disturb",
+        "sfinder_keyword_turn_off_do_not_disturb"
+      ]
+    },
+    {
+      "_id": 15,
+      "keyword_en_us": "flashlight",
+      "keyword_ko": "손전등",
+      "keyword_zh": "手电筒",
+      "keyword_en": "flashlight",
+      "keyword_fr": "Lampe torche",
+      "keyword_de": "Blitzlicht",
+      "keyword_it": "Flash",
+      "keyword_es": "Linterna",
+      "keyword_pt": "Lanterna",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_the_flashlight",
+        "sfinder_keyword_turn_off_the_flashlight"
+      ]
+    },
+    {
+      "_id": 16,
+      "keyword_en_us": "torch",
+      "keyword_ko": "손전등",
+      "keyword_zh": "手电筒",
+      "keyword_en": "torch",
+      "keyword_fr": "Lampe",
+      "keyword_de": "Taschenlampe",
+      "keyword_it": "Torcia",
+      "keyword_es": "Lanterna",
+      "keyword_pt": "Lanterna",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_the_flashlight",
+        "sfinder_keyword_turn_off_the_flashlight"
+      ]
+    },
+    {
+      "_id": 17,
+      "keyword_en_us": "Weather",
+      "keyword_ko": "날씨",
+      "keyword_zh": "天气",
+      "keyword_en": "Weather",
+      "keyword_fr": "Météo",
+      "keyword_de": "Wetter",
+      "keyword_it": "Meteo",
+      "keyword_es": "El tiempo",
+      "keyword_pt": "El tiempo",
+      "utteranceIds": [
+        "sfinder_keyword_hows_the_weather_today"
+      ]
+    },
+    {
+      "_id": 18,
+      "keyword_en_us": "Notification",
+      "keyword_ko": "알림",
+      "keyword_zh": "通知",
+      "keyword_en": "Notification",
+      "keyword_fr": "Notification",
+      "keyword_de": "Benachrichtigung",
+      "keyword_it": "Notifica",
+      "keyword_es": "Notificação",
+      "keyword_pt": "Notificação",
+      "utteranceIds": [
+        "sfinder_keyword_read_notifications"
+      ]
+    },
+    {
+      "_id": 20,
+      "keyword_en_us": "phone",
+      "keyword_ko": "전화",
+      "keyword_zh": "电话",
+      "keyword_en": "phone",
+      "keyword_fr": "Téléphone",
+      "keyword_de": "Telefon",
+      "keyword_it": "Telefono",
+      "keyword_es": "Telefone",
+      "keyword_pt": "Telefone",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_do_i_have_any_missed_calls"
+      ]
+    },
+    {
+      "_id": 21,
+      "keyword_en_us": "call",
+      "keyword_ko": "호출",
+      "keyword_zh": "呼叫",
+      "keyword_en": "call",
+      "keyword_fr": "Appeler",
+      "keyword_de": "Anrufen",
+      "keyword_it": "Chiama",
+      "keyword_es": "Chamar",
+      "keyword_pt": "Chamar",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_do_i_have_any_missed_calls"
+      ]
+    },
+    {
+      "_id": 22,
+      "keyword_en_us": "message",
+      "keyword_ko": "문자",
+      "keyword_zh": "信息",
+      "keyword_en": "message",
+      "keyword_fr": "Message",
+      "keyword_de": "Nachricht",
+      "keyword_it": "Messaggio",
+      "keyword_es": "Mensagem",
+      "keyword_pt": "Mensagem",
+      "utteranceIds": [
+        "sfinder_keyword_read_the_message",
+        "sfinder_keyword_text_serena"
+      ]
+    },
+    {
+      "_id": 23,
+      "keyword_en_us": "text",
+      "keyword_ko": "텍스트",
+      "keyword_zh": "文本",
+      "keyword_en": "text",
+      "keyword_fr": "Texte",
+      "keyword_de": "Text",
+      "keyword_it": "Testo",
+      "keyword_es": "Texto",
+      "keyword_pt": "Texto",
+      "utteranceIds": [
+        "sfinder_keyword_read_the_message",
+        "sfinder_keyword_text_serena"
+      ]
+    },
+    {
+      "_id": 24,
+      "keyword_en_us": "Schedule",
+      "keyword_ko": "예약",
+      "keyword_zh": "预先设定",
+      "keyword_en": "Schedule",
+      "keyword_fr": "Programmer",
+      "keyword_de": "Zeitplan",
+      "keyword_it": "Programma",
+      "keyword_es": "Programar",
+      "keyword_pt": "Agendar",
+      "utteranceIds": [
+        "sfinder_keyword_read_todays_schedule",
+        "sfinder_keyword_add_schedule"
+      ]
+    },
+    {
+      "_id": 25,
+      "keyword_en_us": "Calendar",
+      "keyword_ko": "캘린더",
+      "keyword_zh": "日历",
+      "keyword_en": "Calendar",
+      "keyword_fr": "Calendrier",
+      "keyword_de": "Kalender",
+      "keyword_it": "Calendario",
+      "keyword_es": "Agenda",
+      "keyword_pt": "Calendário",
+      "utteranceIds": [
+        "sfinder_keyword_read_todays_schedule",
+        "sfinder_keyword_add_schedule"
+      ]
+    },
+    {
+      "_id": 26,
+      "keyword_en_us": "Event",
+      "keyword_ko": "일정",
+      "keyword_zh": "事件",
+      "keyword_en": "Event",
+      "keyword_fr": "Événement",
+      "keyword_de": "Ereignis",
+      "keyword_it": "Evento",
+      "keyword_es": "Evento",
+      "keyword_pt": "Evento",
+      "utteranceIds": [
+        "sfinder_keyword_read_todays_schedule",
+        "sfinder_keyword_add_schedule"
+      ]
+    },
+    {
+      "_id": 27,
+      "keyword_en_us": "Meeting",
+      "keyword_ko": "회의",
+      "keyword_zh": "会议",
+      "keyword_en": "Meeting",
+      "keyword_fr": "Réunion",
+      "keyword_de": "Besprechung",
+      "keyword_it": "Riunione",
+      "keyword_es": "Reunión",
+      "keyword_pt": "Reunión",
+      "utteranceIds": [
+        "sfinder_keyword_read_todays_schedule",
+        "sfinder_keyword_add_schedule"
+      ]
+    },
+    {
+      "_id": 28,
+      "keyword_en_us": "Calculator",
+      "keyword_ko": "계산기",
+      "keyword_zh": "计算器",
+      "keyword_en": "Calculator",
+      "keyword_fr": "Calculatrice",
+      "keyword_de": "Taschenrechner",
+      "keyword_it": "Calcolatrice",
+      "keyword_es": "Calculadora",
+      "keyword_pt": "Calculadora",
+      "utteranceIds": [
+        "sfinder_keyword_calculate",
+        "sfinder_keyword_convert_1_ton_to_grams"
+      ]
+    },
+    {
+      "_id": 29,
+      "keyword_en_us": "Alarm",
+      "keyword_ko": "알람",
+      "keyword_zh": "提示",
+      "keyword_en": "Alarm",
+      "keyword_fr": "Alarme",
+      "keyword_de": "Alarm",
+      "keyword_it": "Sveglia",
+      "keyword_es": "Alarma",
+      "keyword_pt": "Alarme",
+      "utteranceIds": [
+        "sfinder_keyword_set_alarm",
+        "sfinder_keyword_turn_off_all_alarms"
+      ]
+    },
+    {
+      "_id": 30,
+      "keyword_en_us": "Clock",
+      "keyword_ko": "시계",
+      "keyword_zh": "时钟",
+      "keyword_en": "Clock",
+      "keyword_fr": "Horloge",
+      "keyword_de": "Uhr",
+      "keyword_it": "Orologio",
+      "keyword_es": "Relógio",
+      "keyword_pt": "Relógio",
+      "utteranceIds": [
+        "sfinder_keyword_set_alarm",
+        "sfinder_keyword_turn_off_all_alarms"
+      ]
+    },
+    {
+      "_id": 31,
+      "keyword_en_us": "Reminder",
+      "keyword_ko": "리마인더",
+      "keyword_zh": "提醒",
+      "keyword_en": "Reminder",
+      "keyword_fr": "Reminder",
+      "keyword_de": "Reminder",
+      "keyword_it": "Promemoria",
+      "keyword_es": "Reminder",
+      "keyword_pt": "Reminder",
+      "utteranceIds": [
+        "sfinder_keyword_remind_me_to_work_out_tomorrow_morning_at_9",
+        "sfinder_keyword_remind_me_that_i_parked_my_car_on_b3"
+      ]
+    },
+    {
+      "_id": 32,
+      "keyword_en_us": "Mobile Hotspot MobileHotspot",
+      "keyword_ko": "모바일 핫스팟 모바일핫스팟",
+      "keyword_zh": "移动热点",
+      "keyword_en": "Mobile Hotspot MobileHotspot",
+      "keyword_fr": "Point d'accès mobile Pointd'accèsmobile",
+      "keyword_de": "Mobile Hotspot MobileHotspot",
+      "keyword_it": "Router Wi-Fi RouterWi-Fi",
+      "keyword_es": "Conexión compartida Conexióncompartida",
+      "keyword_pt": "Roteador Wi-Fi RoteadorWi-Fi",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_mobile_hotspot",
+        "sfinder_keyword_turn_off_mobile_hotspot"
+      ]
+    },
+    {
+      "_id": 33,
+      "keyword_en_us": "character",
+      "keyword_ko": "글자",
+      "keyword_zh": "字符",
+      "keyword_en": "character",
+      "keyword_fr": "Caractère",
+      "keyword_de": "Zeichen",
+      "keyword_it": "Carattere",
+      "keyword_es": "Carácter",
+      "keyword_pt": "Caractere",
+      "utteranceIds": [
+        "sfinder_keyword_increase_the_font_size",
+        "sfinder_keyword_reduce_the_font_size"
+      ]
+    },
+    {
+      "_id": 34,
+      "keyword_en_us": "Messages",
+      "keyword_ko": "메시지",
+      "keyword_zh": "信息",
+      "keyword_en": "Messages",
+      "keyword_fr": "Messages",
+      "keyword_de": "Nachrichten",
+      "keyword_it": "Messaggi",
+      "keyword_es": "Mensajes",
+      "keyword_pt": "Mensagens",
+      "utteranceIds": [
+        "sfinder_keyword_read_the_message",
+        "sfinder_keyword_text_serena"
+      ]
+    },
+    {
+      "_id": 35,
+      "keyword_en_us": "Capsules",
+      "keyword_ko": "캡슐",
+      "keyword_zh": "胶囊工具",
+      "keyword_en": "Capsules",
+      "keyword_fr": "Capsules",
+      "keyword_de": "Kapseln",
+      "keyword_it": "Capsule",
+      "keyword_es": "Cápsulas",
+      "keyword_pt": "Cápsulas",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_set_alarm"
+      ]
+    },
+    {
+      "_id": 36,
+      "keyword_en_us": "Events",
+      "keyword_ko": "이벤트",
+      "keyword_zh": "活动",
+      "keyword_en": "Events",
+      "keyword_fr": "Événements",
+      "keyword_de": "Ereignisse",
+      "keyword_it": "Eventi",
+      "keyword_es": "Eventos",
+      "keyword_pt": "Eventos",
+      "utteranceIds": [
+        "sfinder_keyword_read_todays_schedule",
+        "sfinder_keyword_add_schedule"
+      ]
+    },
+    {
+      "_id": 37,
+      "keyword_en_us": "Alarms",
+      "keyword_ko": "알람",
+      "keyword_zh": "闹钟",
+      "keyword_en": "Alarms",
+      "keyword_fr": "Alarmes",
+      "keyword_de": "Alarme",
+      "keyword_it": "Sveglie",
+      "keyword_es": "Alarmas",
+      "keyword_pt": "Alarmes",
+      "utteranceIds": [
+        "sfinder_keyword_set_alarm",
+        "sfinder_keyword_turn_off_all_alarms"
+      ]
+    },
+    {
+      "_id": 39,
+      "keyword_en_us": "Calls",
+      "keyword_ko": "통화",
+      "keyword_zh": "通话",
+      "keyword_en": "Calls",
+      "keyword_fr": "Appels",
+      "keyword_de": "Anrufe",
+      "keyword_it": "Chiamate",
+      "keyword_es": "Llamadas",
+      "keyword_pt": "Chamadas",
+      "utteranceIds": [
+        "sfinder_keyword_call_mom",
+        "sfinder_keyword_do_i_have_any_missed_calls"
+      ]
+    },
+    {
+      "_id": 40,
+      "keyword_en_us": "Notifications",
+      "keyword_ko": "알림",
+      "keyword_zh": "通知",
+      "keyword_en": "Notifications",
+      "keyword_fr": "Notifications",
+      "keyword_de": "Benachrichtigungen",
+      "keyword_it": "Notifiche",
+      "keyword_es": "Notificaciones",
+      "keyword_pt": "Notificações",
+      "utteranceIds": [
+        "sfinder_keyword_read_notifications"
+      ]
+    },
+    {
+      "_id": 41,
+      "keyword_en_us": "Reminders",
+      "keyword_ko": "리마인더",
+      "keyword_zh": "提醒时间",
+      "keyword_en": "Reminders",
+      "keyword_fr": "Rappels",
+      "keyword_de": "Erinnerungen",
+      "keyword_it": "Promemoria",
+      "keyword_es": "Recordatorios",
+      "keyword_pt": "Lembretes",
+      "utteranceIds": [
+        "sfinder_keyword_remind_me_to_work_out_tomorrow_morning_at_9",
+        "sfinder_keyword_remind_me_that_i_parked_my_car_on_b3"
+      ]
+    },
+    {
+      "_id": 42,
+      "keyword_en_us": "Volume",
+      "keyword_ko": "볼륨",
+      "keyword_zh": "音量",
+      "keyword_en": "Volume",
+      "keyword_fr": "Volume",
+      "keyword_de": "Lautstärke",
+      "keyword_it": "Volume",
+      "keyword_es": "Volumen",
+      "keyword_pt": "Volumen",
+      "utteranceIds": [
+        "sfinder_keyword_increase_volume",
+        "sfinder_keyword_decrease_volume"
+      ]
+    },
+    {
+      "_id": 43,
+      "keyword_en_us": "do not disturb donotdisturb",
+      "keyword_ko": "방해 금지 모드 방해금지모드",
+      "keyword_zh": "免打扰",
+      "keyword_en": "do not disturb donotdisturb",
+      "keyword_fr": "Ne pas déranger Nepasdéranger",
+      "keyword_de": "Nicht stören Nichtstören",
+      "keyword_it": "Non disturbare Nondisturbare",
+      "keyword_es": "Não perturbar Nãoperturbar",
+      "keyword_pt": "Não perturbar Nãoperturbar",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_do_not_disturb",
+        "sfinder_keyword_turn_off_do_not_disturb"
+      ]
+    },
+    {
+      "_id": 44,
+      "keyword_en_us": "flashlight",
+      "keyword_ko": "플래시",
+      "keyword_zh": "手电筒",
+      "keyword_en": "flashlight",
+      "keyword_fr": "Lampe torche",
+      "keyword_de": "Blitzlicht",
+      "keyword_it": "Flash",
+      "keyword_es": "Linterna",
+      "keyword_pt": "Lanterna",
+      "utteranceIds": [
+        "sfinder_keyword_turn_on_the_flashlight",
+        "sfinder_keyword_turn_off_the_flashlight"
+      ]
+    },
+    {
+      "_id": 45,
+      "keyword_en_us": "message",
+      "keyword_ko": "메시지",
+      "keyword_zh": "信息",
+      "keyword_en": "message",
+      "keyword_fr": "Message",
+      "keyword_de": "Nachricht",
+      "keyword_it": "Messaggio",
+      "keyword_es": "Mensagem",
+      "keyword_pt": "Mensagem",
+      "utteranceIds": [
+        "sfinder_keyword_read_the_message",
+        "sfinder_keyword_text_serena"
+      ]
+    },
+    {
+      "_id": 46,
+      "keyword_en_us": "Schedule",
+      "keyword_ko": "스케줄",
+      "keyword_zh": "预先设定",
+      "keyword_en": "Schedule",
+      "keyword_fr": "Programmer",
+      "keyword_de": "Zeitplan",
+      "keyword_it": "Programma",
+      "keyword_es": "Programar",
+      "keyword_pt": "Agendar",
+      "utteranceIds": [
+        "sfinder_keyword_read_todays_schedule",
+        "sfinder_keyword_add_schedule"
+      ]
+    }
+  ]
+}

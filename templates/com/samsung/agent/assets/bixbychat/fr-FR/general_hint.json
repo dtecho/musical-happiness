@@ -1,0 +1,27 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_frFR",
+    "goal": "FR_ENTERTAIN_INTERESTING_Q2",
+    "utterance": "Anecdote"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_frFR",
+    "goal": "ABOUTME_CAT3_Q4",
+    "utterance": "Je m'ennuie"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_frFR",
+    "goal": "FR_VRAI_FAUX",
+    "utterance": "Vrai ou faux"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_frFR",
+    "goal": "ENTERTAIN_JOKE_Q10",
+    "utterance": "Raconte-moi une blague"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_frFR",
+    "goal": "ENTERTAIN_STORY_Q1",
+    "utterance": "Raconte-moi une histoire"
+  }
+]

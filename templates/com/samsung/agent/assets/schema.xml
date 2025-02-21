@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema name="com.samsung.android.bixby.agent.doc" version="1">
+
+    <fieldType name="string" class="StringField" dataType="String"/>
+    <fieldType name="text" class="TextField" dataType="String"/>
+
+    <fieldType name="ko_phonetic" class="TextField" dataType="String">
+        <analyzer class="bs.core.UnifiedAnalyzer" ko="hasOrigin=true|originCNoun=true"/>
+    </fieldType>
+
+    <fieldType name="en_phonetic" class="TextField" dataType="String">
+        <analyzer class="bs.core.UnifiedAnalyzer" la="phonetic=true" type="index"/>
+        <analyzer class="bs.LowerCaseSpaceAnalyzer" type="search"/>
+    </fieldType>
+
+    <fieldType name="ko_consonant" class="TextField" dataType="String">
+        <analyzer class="bs.korean.ConsonantAnalyzer" type="search"/>
+    </fieldType>
+
+    <fieldType name="sort" class="SortedDocValuesField" dataType="BytesRef"/>
+
+    <field name="_id" type="string"/>
+    <field name="keyword_en_us" type="text"/>
+    <field name="keyword_ko" type="text"/>
+    <field name="keyword_zh" type="text"/>
+    <field name="keyword_en" type="text"/>
+    <field name="keyword_fr" type="text"/>
+    <field name="keyword_de" type="text"/>
+    <field name="keyword_it" type="text"/>
+    <field name="keyword_es" type="text"/>
+    <field name="keyword_pt" type="text"/>
+    <field name="utteranceIds" type="text"/>
+
+    <field name="keyword_ko_phonetic" stored="false" type="ko_phonetic"/>
+    <field name="keyword_ko_sort" type="sort"/>
+    <field name="keyword_en_phonetic" stored="false" type="en_phonetic"/>
+    <field name="keyword_ko_consonant" stored="false" type="ko_consonant"/>
+
+    <copyField dest="keyword_ko_phonetic" source="keyword_ko"/>
+    <copyField dest="keyword_ko_sort" source="keyword_ko"/>
+    <copyField dest="keyword_en_phonetic" source="keyword_en"/>
+    <copyField dest="keyword_ko_consonant" source="keyword_ko"/>
+</schema>

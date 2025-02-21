@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.tts";
+
+import "codec.proto";
+
+package viv;
+
+message TtsRequest {
+    // (required) Language to encode in (e.g. "en-US")
+    string language = 1;
+    // (required) Text to convert
+    string text = 2;
+    // (optional) Specify custom voice
+    string voice = 3;
+    // (optional) Audio format
+    AudioCodec codec = 4;
+    // (optional) Provider
+    Provider provider = 5;
+
+    string rampcode = 6;
+
+    // (optional) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+    string conversationId = 7;
+
+    // (optional) Client-generated requestId. Should be unique.
+    // Use Unix Epoch Tiestamp in Milliseconds
+    uint64 requestId = 8;
+
+    enum Provider {
+        DEFAULT = 0;
+        BIXBY = 1;
+        GOOGLE = 2;
+    }
+}
+
+message TtsResponse {
+    // (required) Identifier for this TtsResponse stream
+    int32 id = 1;
+    oneof type {
+        // (optional) Sent initially with metadata
+        Metadata metadata = 2;
+        // Raw TTS data
+        bytes data = 3;
+        // End of stream
+        bool end = 4;
+    }
+
+    message Metadata {
+        // (optional) Language that is being used
+        string language = 1;
+        // (optional) Text that is being read
+        string text = 2;
+        // TODO: Audio codec?
+        // (required) The event that triggered the TTS Response
+        string sourceEvent = 3;
+        // (optional) Result ID associated with TtsResponse if TtsResponse is for HEF item summary
+        string resultId = 4;
+    }
+}

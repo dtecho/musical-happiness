@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.service";
+
+import public "asr.proto";
+import public "asr2.proto";
+import public "tts.proto";
+import public "viv.proto";
+import public "metrics.proto";
+import public "analytics.proto";
+import public "observations.proto";
+import public "healthcheck.proto";
+import public "serverinfo.proto";
+import public "mde.proto";
+import public "refreshconversation.proto";
+
+package viv;
+
+service VivService {
+  // Make a stand-alone Automatic Speech Recognition request
+  // This endpoint is to be deprecated; use Asr2Stream instead
+  rpc AsrStream (stream AsrRequest) returns (stream AsrResponse);
+
+  // V2 of ASR stream
+  rpc Asr2Stream (stream Asr2Request) returns (stream Asr2Response);
+
+  // Make a stand-alone Text-to-Speech request
+  rpc TtsStream (TtsRequest) returns (stream TtsResponse);
+
+  // Make a Viv Platform request
+  rpc VivStream (stream VivRequest) returns (stream VivResponse);
+
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse);
+
+  // Deprecated - do not use this service - does nothing
+  // Use the analytics service instead
+  rpc Metrics (MetricsRequest) returns (MetricsResponse);
+
+  rpc Analytics (AnalyticsRequest) returns (AnalyticsResponse);
+
+  rpc Observations (ObservationsRequest) returns (ObservationsResponse);
+
+  // Get the CES version + protobuf + etc version used
+  rpc ServerInfo (ServerInfoRequest) returns (ServerInfoResponse);
+
+  // MDE (aka Device Dispatch) endpoint, used to keep the conversation state
+  // in sync for all devices participating in the same MDE conversation...
+  rpc DeviceDispatch (MdeRequest) returns (MdeResponse);
+
+  // RefreshConversation endpoint used to extend the conversation timeout on BOS
+  rpc RefreshConversation (RefreshConversationRequest) returns (RefreshConversationResponse);
+}

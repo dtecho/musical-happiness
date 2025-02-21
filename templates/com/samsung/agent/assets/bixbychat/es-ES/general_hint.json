@@ -1,0 +1,27 @@
+[
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_esES",
+    "goal": "ENTERTAIN_BEAT_Q1",
+    "utterance": "Haz un beatbox"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_esES",
+    "goal": "ENTERTAIN_JOKE_Q28",
+    "utterance": "Dime un dato curioso"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_esES",
+    "goal": "ENTERTAIN_JOKE_Q1",
+    "utterance": "Cuéntame un chiste"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_esES",
+    "goal": "ENTERTAIN_JOKE_Q12",
+    "utterance": "Dime un acertijo"
+  },
+  {
+    "capsuleId": "viv.bixbyChat_entertainment_esES",
+    "goal": "ENTERTAIN_STORY_Q1",
+    "utterance": "Cuéntame un cuento"
+  }
+]

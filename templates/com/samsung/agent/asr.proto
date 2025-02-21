@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sixfive.protos.asr";
+
+package viv;
+
+import "codec.proto";
+
+message AsrRequest {
+    oneof type {
+        // Send this first speech
+        Metadata metadata = 1;
+
+        // Send this with raw audio data
+        bytes data = 2;
+
+        // End of stream
+        bool end = 3;
+
+        // Abort the ASR session
+        AbortSession abortSessionEvent = 4;
+    }
+
+    message AbortSession {
+        string reason = 1;
+    }
+
+    message Metadata {
+        // (required) Language
+        string language = 1;
+        // (required) Audio encoding
+        AudioCodec codec = 2;
+        // (required) Audio sample rate
+        int32 sampleRateHertz = 3;
+        // (optional) Auto-endpoint on server (if supported)
+        bool autoEndpoint = 4;
+        // (optional) Speech provider to use
+        Provider provider = 5;
+        // rampcode - acoustic model to apply for ASR (mobile|tv|speaker)
+        string rampcode = 6;
+
+        // (optional) Parameters which will be sent when Bixby wakes via voice wakeup.
+        Wakeup wakeup = 7;
+
+        message Wakeup {
+            /* This param indicates whether wakeup module sends audio
+             * including wakeup word or not
+             */
+            bool isWakeupWord = 1;
+
+            /* The text defined for WakeupWord, such as "Hi Bixby"
+             * only applies if isWakeupWord is true
+             */
+            string wakeupWordText = 2;
+
+            /* Acoustic Echo Cancellation
+             * If Bixby is awaken during device is playing music,
+             * wakeup module turns on Acoustic Echo Cancellation.
+             * ASR server needs to know whether AEC is turned on or off
+             * for processing utterance more precisely
+             */
+            bool acousticEchoCancellationEnabled = 3;
+        }
+
+        // (optional) enables voice recognition for the purpose of
+        // identifying the user behind the voice
+        bool triggerVoiceRecognition = 8;
+
+        // (optional) Used for fingerprinting a voice to an account / device
+        VoiceEnrollment voiceEnrollment = 9;
+
+        message VoiceEnrollment {
+            enum EnrollmentType {
+                // This is to force client not to use the GRPC default value.
+                INVALID_ENROLLMODE = 0;
+                ENROLLMENT = 1; //Mode to indicate engine that it's a enrollment audio.
+                ENROLLRESULT = 2; //Mode to ask engine for the enrollment result.
+                RESET = 3; //Mode to delete the generated speaker model.
+            }
+
+            EnrollmentType enrollmentType = 1;
+
+            /*
+             * (optional) Device will send predefined text which will be used for
+             * validation against ASR engine output
+             * it is required when device sends EnrollmentType as 1 or 2.
+             */
+            string enrollmentSampleText = 2;
+        }
+
+        // (optional) Client-generated conversation id in format /tr-\d{8}T\d{6}\.\d{3}Z-\w{6,20}/
+        // currently used for log tracking
+        string conversationId = 10;
+
+        // (optional) Client-generated requestId. Should be unique.
+        // Format is Unix Epoch Timestamp in Milliseconds
+        uint64 requestId = 11;
+    }
+
+    enum Provider {
+        DEFAULT = 0;
+        BIXBY = 1;
+        GOOGLE = 2;
+    }
+}
+
+message AsrResponse {
+    // Recognized speech
+    string text = 1;
+
+    // The final recognition
+    bool final = 2;
+
+    // Was this an automatic endpoint?
+    bool endpointed = 3;
+
+    // A tokenized version of the text
+    // eg 打开电话录音设置界面 -> 打开 电话 录音 设置 界面
+    string tokenizedText = 4;
+
+    // Timing information sent for word highlight animation
+    // eg "3_to_58 65_to_100 101_to_111 112_to_135 136_to_175 200_to_219”
+    string textAnimationTimings = 5;
+
+    // (optional) - If voice recognition was unable to validate the voice against the user's
+    // voice fingerprint
+    VoiceRecognitionInvalid voiceRecognitionInvalid = 6;
+
+    message VoiceRecognitionInvalid {
+        // the account id that we were trying to do voice validation against
+        string accountId = 1;
+    }
+
+    EnrollmentResult enrollmentResult = 7;
+
+    message EnrollmentResult {
+
+        /* This is optional parameter.
+         * When user enable 'unlock with voice' feature.
+         * User has to uttered few predefined sentences.
+         * After each utterance, validation will happen at the ASR server and result will be sent to device
+         * This result should be checked only in case of EnrollmentType == 1
+         * true : go to next sentence, false try again same sentence
+         */
+        bool isValidUtterance = 1;
+
+        /* This is optional parameter.
+         * When user enable 'unlock with voice' feature.
+         * User has to uttered few predefined sentences.
+         * During last utterance, validation will happen at the ASR server and enrollment result will be sent to device
+         * This result should be sent and checked only in case of EnrollmentType == 2
+         * success : enrollment finished, voice unlock feature can be used
+         * fail : voice enrollment failed, try again
+         */
+        bool enrollmentFinished = 2;
+
+        /* This is optional parameter.
+         *
+         * Parameter Description :
+         *      This parameter is to send the reset result to CES from ASR Service.
+         *      when user requests reset with `enrollmentType = 3` (RESET),
+         *      this parameter will be set with result.
+         *
+         */
+        ModelDeletedResult modelDeletedResult = 3;
+    }
+
+    /* true if device woke up without wakeup command, unintentional woke up
+     * Let's say user has set wakeup word as "Hi Bixby"
+     * Unintentionally user is uttering "Hi Bigb", in this case device shouldn't wakeup
+     * Device will send audio data with wakeup paramter to server
+     * ASR Server side compares the predefined wakeup command and user utterance to decide falseWakeup
+     */
+    bool invalidWakeup = 8;
+
+    // If true, then ASR failed because of too much background noise for it to be able to interpret audio
+    bool isNoisy = 9;
+}
+
+message ModelDeletedResult {
+
+    /* This is mandatory parameter.
+     *
+     * Parameter Description :
+     *      if this parameter set to true, it means speaker model is deleted successfully.
+     *      if this parameter set to false, it means speaker model is not deleted successfully.
+     *
+     */
+
+    bool deleted = 1;
+
+    /* This is mandatory parameter.
+     *
+     * Parameter Description :
+     *      2xx: success response.
+     *      4xx: there is some issue with client's request side.
+     *      5xx: there is some issue with server side.
+     *
+     */
+
+    int32 statusCode = 2;
+
+    /* This is optional parameter.
+     *
+     * Parameter Description :
+     *      this is parameter for more details of response status.
+     *
+     */
+
+    string statusMsg = 3;
+}

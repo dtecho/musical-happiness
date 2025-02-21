@@ -1,0 +1,12 @@
+{
+  "partner": [
+    {
+      "name": "netflix",
+      "link": "https://www.netflix.com/account/link"
+    },
+    {
+      "name": "spotify",
+      "link": "spotifyaccountlinking://samsungv1"
+    }
+  ]
+}
